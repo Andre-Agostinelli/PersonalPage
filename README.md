@@ -1,2 +1,2 @@
-# PersonalPage
+# Personal Page
 Personal Landing Page
