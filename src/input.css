@@ -1,26 +1,35 @@
-* {
+@import "tailwindcss";
+
+  @theme {
+  --color-mint-500: oklch(0.72 0.11 178);
+  }
+
+  * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
   
   body {
-    font-family: sans-serif;
+    font:
+      1.2rem "Fira Sans",
+      sans-serif;
     background-color: white;
     color: black;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   .dark-mode {
-    background-color: #121212;
-    color: #f0f0f0;
+    background-color: black;
+    color: white;
   }
   
   .navbar {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
-    background: #eee;
+    padding: 1.5rem;
+    color: #7aadf5;
+    background: gray;
     transition: background-color 0.3s ease;
   }
 

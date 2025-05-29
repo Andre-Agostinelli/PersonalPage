@@ -1,0 +1,26 @@
+{
+  "name": "personalpage",
+  "version": "1.0.0",
+  "description": "Personal Landing Page",
+  "homepage": "https://github.com/Andre-Agostinelli/PersonalPage#readme",
+  "bugs": {
+    "url": "https://github.com/Andre-Agostinelli/PersonalPage/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andre-Agostinelli/PersonalPage.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i ./src/input.css -o ./src/output.css --watch", 
+    "build": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.8",
+    "tailwindcss": "^4.1.8"
+  }
+}
