@@ -1,5 +1,6 @@
 // Navigation tabs switching
-const links = document.querySelectorAll('nav ul li a');
+// Now also includes the name link (Andre Agostinelli)
+const links = document.querySelectorAll('nav a[data-page]'); // Selects any 'a' tag within 'nav' that has a 'data-page' attribute
 const pages = document.querySelectorAll('main section.page');
 
 // Define the classes that make a tab "active" in the navbar
@@ -16,13 +17,13 @@ const hoverTabClasses = [
     'hover:bg-slate-400',
     'dark:hover:bg-slate-200',
     'hover:text-white',
-    'dark:hover:text-black'
+    'dark:hover:text-black',
+    'hover:underline' // Add underline hover for the blog link too
 ];
 
 // Function to set the initial active tab and display the corresponding page
 function initializePageAndTabs() {
-    // Determine the initial page (e.g., "home" by default, or from URL hash if you implement that later)
-    const initialPageId = 'home'; 
+    const initialPageId = 'home'; // Default to 'home' on load
 
     // Hide all pages first
     pages.forEach(page => {
@@ -37,14 +38,17 @@ function initializePageAndTabs() {
         initialPage.classList.add('block');
     }
 
-    // Set the initial active tab in the navbar
+    // Set the initial active tab in the navbar (only for main navigation links)
     links.forEach(link => {
+        // Remove existing active/hover styles from all links
+        activeTabClasses.forEach(cls => link.classList.remove(cls));
+        hoverTabClasses.forEach(cls => link.classList.remove(cls));
+
+        // If this is the initial active link
         if (link.getAttribute('data-page') === initialPageId) {
             activeTabClasses.forEach(cls => link.classList.add(cls));
-            // Ensure the initial active tab doesn't show hover effect
-            hoverTabClasses.forEach(cls => link.classList.remove(cls));
         } else {
-            // Ensure other tabs have their hover classes
+            // Apply hover classes to all non-active links
             hoverTabClasses.forEach(cls => link.classList.add(cls));
         }
     });
@@ -72,11 +76,12 @@ links.forEach(link => {
         // Remove active styles from all links and re-add hover styles
         links.forEach(l => {
             activeTabClasses.forEach(cls => l.classList.remove(cls));
-            hoverTabClasses.forEach(cls => l.classList.add(cls)); // Ensure non-active links have hover
+            // Only add hover classes back if it's not the newly active link
+            hoverTabClasses.forEach(cls => l.classList.add(cls));
         });
 
         // Add active styles to the clicked link and remove its hover styles
         activeTabClasses.forEach(cls => link.classList.add(cls));
-        hoverTabClasses.forEach(cls => link.classList.remove(cls)); // Active link should not show hover effect
+        hoverTabClasses.forEach(cls => link.classList.remove(cls));
     });
 });
