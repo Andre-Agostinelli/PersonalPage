@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.8 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.11 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -7,11 +7,27 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-slate-100: oklch(96.8% 0.007 247.896);
+    --color-slate-200: oklch(92.9% 0.013 255.508);
+    --color-slate-300: oklch(86.9% 0.022 252.894);
+    --color-slate-400: oklch(70.4% 0.04 256.788);
+    --color-slate-500: oklch(55.4% 0.046 257.417);
+    --color-slate-700: oklch(37.2% 0.044 257.287);
+    --color-slate-800: oklch(27.9% 0.041 260.031);
+    --color-black: #000;
+    --color-white: #fff;
+    --spacing: 0.25rem;
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --radius-lg: 0.5rem;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
-    --color-mint-500: oklch(0.72 0.11 178);
   }
 }
 @layer base {
@@ -160,8 +176,26 @@
   }
 }
 @layer utilities {
+  .mx-auto {
+    margin-inline: auto;
+  }
+  .mb-4 {
+    margin-bottom: calc(var(--spacing) * 4);
+  }
+  .block {
+    display: block;
+  }
+  .flex {
+    display: flex;
+  }
+  .hidden {
+    display: none;
+  }
   .table {
     display: table;
+  }
+  .w-\[180px\] {
+    width: 180px;
   }
   .border-collapse {
     border-collapse: collapse;
@@ -169,12 +203,70 @@
   .resize {
     resize: both;
   }
+  .items-center {
+    align-items: center;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
   }
-  .bg-mint-500 {
-    background-color: var(--color-mint-500);
+  .bg-slate-100 {
+    background-color: var(--color-slate-100);
+  }
+  .bg-slate-300 {
+    background-color: var(--color-slate-300);
+  }
+  .bg-slate-500 {
+    background-color: var(--color-slate-500);
+  }
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
+  }
+  .p-8 {
+    padding: calc(var(--spacing) * 8);
+  }
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
+  }
+  .py-1 {
+    padding-block: calc(var(--spacing) * 1);
+  }
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
+  }
+  .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
+  .text-slate-700 {
+    color: var(--color-slate-700);
+  }
+  .text-slate-800 {
+    color: var(--color-slate-800);
+  }
+  .text-white {
+    color: var(--color-white);
   }
   .underline {
     text-decoration-line: underline;
@@ -183,109 +275,118 @@
     outline-style: var(--tw-outline-style);
     outline-width: 1px;
   }
-  .transition {
-    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, visibility, content-visibility, overlay, pointer-events;
+  .transition-colors {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
-}
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  font: 1.2rem "Fira Sans", sans-serif;
-  background-color: white;
-  color: black;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-.dark-mode {
-  background-color: black;
-  color: white;
-}
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 1.5rem;
-  color: #7aadf5;
-  background: gray;
-  transition: background-color 0.3s ease;
-}
-body.dark-mode .navbar {
-  background-color: #1e1e1e;
-}
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-}
-.nav-links a {
-  text-decoration: none;
-  color: inherit;
-}
-.nav-links a {
-  text-decoration: none;
-  color: inherit;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  transition: background-color 0.3s, color 0.3s;
-}
-.nav-links a:hover {
-  background-color: #ddd;
-  color: #000;
-}
-body.dark-mode .nav-links a:hover {
-  background-color: #333;
-  color: #fff;
-}
-.nav-links a.active-tab {
-  background-color: #bbb;
-  font-weight: bold;
-}
-body.dark-mode .nav-links a.active-tab {
-  background-color: #555;
-}
-.page {
-  display: none;
-  padding: 2rem;
-}
-.page.active {
-  display: block;
-}
-#theme-toggle {
-  background-color: #ddd;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-#theme-toggle:hover {
-  background-color: #ccc;
-}
-body.dark-mode #theme-toggle {
-  background-color: #333;
-  color: #fff;
-}
-body.dark-mode #theme-toggle:hover {
-  background-color: #444;
+  .duration-200 {
+    --tw-duration: 200ms;
+    transition-duration: 200ms;
+  }
+  .duration-300 {
+    --tw-duration: 300ms;
+    transition-duration: 300ms;
+  }
+  .duration-400 {
+    --tw-duration: 400ms;
+    transition-duration: 400ms;
+  }
+  .hover\:bg-slate-400 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-slate-400);
+      }
+    }
+  }
+  .hover\:bg-slate-500 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-slate-500);
+      }
+    }
+  }
+  .hover\:text-white {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-white);
+      }
+    }
+  }
+  .dark\:bg-slate-200 {
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--color-slate-200);
+    }
+  }
+  .dark\:bg-slate-700 {
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--color-slate-700);
+    }
+  }
+  .dark\:bg-slate-800 {
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--color-slate-800);
+    }
+  }
+  .dark\:text-black {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-black);
+    }
+  }
+  .dark\:text-slate-100 {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-slate-100);
+    }
+  }
+  .dark\:text-slate-300 {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-slate-300);
+    }
+  }
+  .dark\:hover\:bg-slate-200 {
+    @media (prefers-color-scheme: dark) {
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--color-slate-200);
+        }
+      }
+    }
+  }
+  .dark\:hover\:text-black {
+    @media (prefers-color-scheme: dark) {
+      &:hover {
+        @media (hover: hover) {
+          color: var(--color-black);
+        }
+      }
+    }
+  }
 }
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
 }
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-outline-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
 }
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
       --tw-border-style: solid;
+      --tw-font-weight: initial;
       --tw-outline-style: solid;
+      --tw-duration: initial;
     }
   }
 }

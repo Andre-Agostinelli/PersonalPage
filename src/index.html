@@ -1,52 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Andre's Portfolio Page</title>
-    <link rel="stylesheet" href="output.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andre's Portfolio Page</title>
+  <link rel="stylesheet" href="./output.css" />
 </head>
-<body>
-
-  <div class="bg-mint-500">mint?</div>
-
-  <!--Contents of the webpage-->
-    <header>
-        <nav class="navbar">
-            <div class="logo">Andre Agostinelli</div>
-            <ul class="nav-links">
-              <li><a href="#" data-page="home">Home</a></li>
-              <li><a href="#" data-page="about">About</a></li>
-              <li><a href="#" data-page="projects">Projects</a></li>
-              <li><a href="#" data-page="contact">Contact</a></li>
-            </ul>
-            <button id="theme-toggle">🌙</button>
-        </nav>
-    </header>
+<body class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 transition-colors duration-200 font-sans">
+  <header>
+    <nav class="bg-slate-300 text-slate-800 dark:bg-slate-800 dark:text-slate-100 flex p-6 transition-colors duration-300 items-center justify-between">
+      <div class="font-bold text-lg">Andre Agostinelli</div>
       
-    <main>
-      <section id="home" class="page active">
-        <h1>Welcome to My Portfolio</h1>
-        <p>This is the landing page!</p>
-      </section>
-  
-      <section id="about" class="page">
-        <h1>About Me</h1>
-        <p>Some details about who I am...</p>
-      </section>
-  
-      <section id="projects" class="page">
-        <h1>Projects</h1>
-        <p>Here are some cool things I’ve built.</p>
-      </section>
-  
-      <section id="contact" class="page">
-        <h1>Contact Me</h1>
-        <p>Email, socials, etc.</p>
-      </section>
-    </main>
-  
-    <script src="script.js"></script>
+      <ul class="flex gap-6 mx-auto font-semibold">
+        <li>
+          <a
+            href="#"
+            data-page="home"
+            class="px-3 py-1 rounded-lg hover:bg-slate-500 dark:hover:bg-slate-200 hover:text-white dark:hover:text-black transition-colors duration-400"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            href="#"
+            data-page="about"
+            class="px-3 py-1 rounded-lg hover:bg-slate-500 dark:hover:bg-slate-200 hover:text-white dark:hover:text-black transition-colors duration-400"
+            >About</a
+          >
+        </li>
+        <li>
+          <a
+            href="#"
+            data-page="projects"
+            class="px-3 py-1 rounded-lg hover:bg-slate-500 dark:hover:bg-slate-200 hover:text-white dark:hover:text-black transition-colors duration-400"
+            >Projects</a
+          >
+        </li>
+        <li>
+          <a
+            href="#"
+            data-page="contact"
+            class="px-3 py-1 rounded-lg hover:bg-slate-500 dark:hover:bg-slate-200 hover:text-white dark:hover:text-black transition-colors duration-400"
+            >Contact</a
+          >
+        </li>
+      </ul>
+      
+      <div class="w-[180px]"></div> </nav>
+  </header>
+
+  <main>
+    <section id="home" class="page p-8 block">
+      <h1 class="text-3xl font-bold mb-4">Welcome to My Portfolio</h1>
+      <p>This is the landing page!</p>
+    </section>
+
+    <section id="about" class="page p-8 hidden">
+      <h1 class="text-3xl font-bold mb-4">About Me</h1>
+      <p>Some details about who I am...</p>
+    </section>
+
+    <section id="projects" class="page p-8 hidden">
+      <h1 class="text-3xl font-bold mb-4">Projects</h1>
+      <p>Here are some cool things I’ve built.</p>
+    </section>
+
+    <section id="contact" class="page p-8 hidden">
+      <h1 class="text-3xl font-bold mb-4">Contact Me</h1>
+      <p>Email, socials, etc.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
-      
