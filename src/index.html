@@ -7,12 +7,20 @@
   <link rel="stylesheet" href="./output.css" />
 </head>
 <body class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 transition-colors duration-200 font-sans">
+
+  <div id="splash-screen" class="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center z-50 transition-opacity duration-700 opacity-100 cursor-pointer">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-700 to-purple-800 animate-splash-bg"></div>
+    
+    <div class="relative z-10 text-center"> <h1 class="text-white text-5xl font-extrabold mb-4 animate-fade-in-up animation-delay-0">Welcome to Andre's Portfolio</h1>
+      <p class="text-white text-lg animate-fade-in-up animation-delay-500">Click anywhere to enter</p>
+    </div>
+  </div>
+
   <header>
     <nav class="bg-slate-300 text-slate-800 dark:bg-slate-800 dark:text-slate-100 flex p-6 transition-colors duration-300 items-center justify-between">
       <div class="font-bold text-xl">
-        <a href="#" data-page="blog" class="hover:underline rounded-xl p-2">Andre Agostinelli</a>
+        <a href="#" data-page="blog" class="rounded-xl p-2">Andre Agostinelli</a>
       </div>
-      
       <ul class="flex gap-6 mx-auto font-semibold">
         <li>
           <a
@@ -47,13 +55,21 @@
           >
         </li>
       </ul>
+
+      <button
+        id="theme-toggle"
+        class="bg-slate-400 dark:bg-slate-700 text-white dark:text-slate-200 px-1 py-1 text-xl ml-4 rounded-md transition-colors duration-300 hover:bg-slate-700 dark:hover:bg-slate-300 cursor-pointer"
+        aria-label="Toggle dark mode"
+      >
+        🌙
+      </button>
       
-      <img src="path/to/your/logo.png" alt="Company Logo" class="h-10 w-auto"> 
+      <img src="path/to/your/logo.png" alt="Company Logo" class="h-10 px-4 w-auto"> 
 
     </nav>
   </header>
 
-  <main>
+  <main class="animate-grid-background">
     <section id="home" class="page p-8 block">
       <h1 class="text-3xl font-bold mb-4">Welcome to My Portfolio</h1>
       <p>This is the landing page!</p>
