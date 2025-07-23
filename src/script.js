@@ -156,3 +156,167 @@ links.forEach(link => {
         hoverTabClasses.forEach(cls => link.classList.remove(cls));
     });
 });
+
+// Circuit Animation System
+class CircuitSystem {
+  constructor() {
+    this.paths = [
+      // Path 1: Complex route
+      {
+        id: 'path1',
+        points: [
+          {x: 0, y: 25}, {x: 20, y: 25}, {x: 20, y: 15}, 
+          {x: 45, y: 15}, {x: 45, y: 30}, {x: 70, y: 30}
+        ],
+        speed: 8000 // 8 seconds
+      },
+      // Path 2: Different route
+      {
+        id: 'path2', 
+        points: [
+          {x: 0, y: 50}, {x: 35, y: 50}, {x: 35, y: 65},
+          {x: 60, y: 65}, {x: 60, y: 45}, {x: 80, y: 45}
+        ],
+        speed: 10000
+      },
+      // Path 3: Simple with branches
+      {
+        id: 'path3',
+        points: [
+          {x: 10, y: 75}, {x: 30, y: 75}, {x: 30, y: 80},
+          {x: 55, y: 80}, {x: 55, y: 70}, {x: 75, y: 70}
+        ],
+        speed: 9000
+      }
+    ];
+    
+    this.init();
+  }
+  
+  init() {
+    const container = document.querySelector('.circuit-background');
+    if (!container) return;
+    
+    this.paths.forEach(path => {
+      this.createPath(path, container);
+      this.animateParticle(path, container);
+    });
+  }
+  
+  createPath(path, container) {
+    const points = path.points;
+    
+    // Create trace segments
+    for (let i = 0; i < points.length - 1; i++) {
+      const start = points[i];
+      const end = points[i + 1];
+      
+      const segment = document.createElement('div');
+      segment.className = 'circuit-trace-segment';
+      segment.dataset.pathId = path.id;
+      segment.dataset.segmentId = i;
+      
+      if (start.x === end.x) {
+        // Vertical segment
+        segment.style.left = `${start.x}%`;
+        segment.style.top = `${Math.min(start.y, end.y)}%`;
+        segment.style.width = '2px';
+        segment.style.height = `${Math.abs(end.y - start.y)}%`;
+      } else {
+        // Horizontal segment
+        segment.style.left = `${Math.min(start.x, end.x)}%`;
+        segment.style.top = `${start.y}%`;
+        segment.style.width = `${Math.abs(end.x - start.x)}%`;
+        segment.style.height = '2px';
+      }
+      
+      container.appendChild(segment);
+    }
+    
+    // Create connection nodes
+    points.forEach((point, index) => {
+      if (index === 0 || index === points.length - 1) return; // Skip start/end
+      
+      const node = document.createElement('div');
+      node.className = 'circuit-node';
+      node.style.left = `${point.x}%`;
+      node.style.top = `${point.y}%`;
+      container.appendChild(node);
+    });
+  }
+  
+  animateParticle(path, container) {
+    const particle = document.createElement('div');
+    particle.className = 'electron-particle';
+    particle.dataset.pathId = path.id;
+    container.appendChild(particle);
+    
+    const animateAlongPath = () => {
+      particle.style.opacity = '1';
+      let currentSegment = 0;
+      const totalSegments = path.points.length - 1;
+      const segmentDuration = path.speed / totalSegments;
+      
+      const moveToNextPoint = () => {
+        if (currentSegment >= totalSegments) {
+          // Reset animation
+          particle.style.opacity = '0';
+          this.clearActiveTraces(path.id);
+          setTimeout(animateAlongPath, 2000); // Wait 2s before restart
+          return;
+        }
+        
+        const start = path.points[currentSegment];
+        const end = path.points[currentSegment + 1];
+        
+        // Activate current trace segment
+        this.setActiveTrace(path.id, currentSegment, true);
+        if (currentSegment > 0) {
+          this.setActiveTrace(path.id, currentSegment - 1, false);
+        }
+        
+        // Animate particle
+        particle.style.transition = `all ${segmentDuration}ms linear`;
+        particle.style.left = `${end.x}%`;
+        particle.style.top = `${end.y}%`;
+        
+        currentSegment++;
+        setTimeout(moveToNextPoint, segmentDuration);
+      };
+      
+      // Start at first point
+      particle.style.left = `${path.points[0].x}%`;
+      particle.style.top = `${path.points[0].y}%`;
+      particle.style.transition = 'none';
+      
+      setTimeout(moveToNextPoint, 100);
+    };
+    
+    // Start with delay
+    setTimeout(animateAlongPath, Math.random() * 3000);
+  }
+  
+  setActiveTrace(pathId, segmentId, active) {
+    const segment = document.querySelector(`[data-path-id="${pathId}"][data-segment-id="${segmentId}"]`);
+    if (segment) {
+      if (active) {
+        segment.classList.add('trace-active');
+      } else {
+        segment.classList.remove('trace-active');
+      }
+    }
+  }
+  
+  clearActiveTraces(pathId) {
+    const segments = document.querySelectorAll(`[data-path-id="${pathId}"]`);
+    segments.forEach(segment => segment.classList.remove('trace-active'));
+  }
+}
+
+// Initialize circuit system when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  // ... your existing DOMContentLoaded code ...
+  
+  // Add circuit system
+  new CircuitSystem();
+});
