@@ -38,8 +38,6 @@
     --radius-md: 0.375rem;
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
-    --ease-out: cubic-bezier(0, 0, 0.2, 1);
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -255,9 +253,6 @@
   .hidden {
     display: none;
   }
-  .table {
-    display: table;
-  }
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
@@ -270,17 +265,8 @@
   .max-w-none {
     max-width: none;
   }
-  .border-collapse {
-    border-collapse: collapse;
-  }
-  .transform {
-    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
-  }
   .cursor-pointer {
     cursor: pointer;
-  }
-  .resize {
-    resize: both;
   }
   .flex-col {
     flex-direction: column;
@@ -305,10 +291,6 @@
   }
   .rounded-xl {
     border-radius: var(--radius-xl);
-  }
-  .border {
-    border-style: var(--tw-border-style);
-    border-width: 1px;
   }
   .bg-slate-100 {
     background-color: var(--color-slate-100);
@@ -412,18 +394,11 @@
   .text-white {
     color: var(--color-white);
   }
-  .underline {
-    text-decoration-line: underline;
-  }
   .opacity-0 {
     opacity: 0%;
   }
   .opacity-100 {
     opacity: 100%;
-  }
-  .outline {
-    outline-style: var(--tw-outline-style);
-    outline-width: 1px;
   }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, visibility, content-visibility, overlay, pointer-events;
@@ -455,14 +430,6 @@
   .duration-700 {
     --tw-duration: 700ms;
     transition-duration: 700ms;
-  }
-  .ease-in-out {
-    --tw-ease: var(--ease-in-out);
-    transition-timing-function: var(--ease-in-out);
-  }
-  .ease-out {
-    --tw-ease: var(--ease-out);
-    transition-timing-function: var(--ease-out);
   }
   .hover\:bg-slate-400 {
     &:hover {
@@ -595,70 +562,102 @@
 }
 .circuit-trace-segment {
   position: absolute;
-  background: #1e40af;
-  opacity: 0.3;
+  background: #22c55e;
+  opacity: 0.4;
   transition: all 0.3s ease;
 }
 .dark .circuit-trace-segment {
-  background: #3b82f6;
+  background: #4ade80;
 }
 .circuit-node {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #1e40af;
-  border: 1px solid #60a5fa;
+  width: 20px;
+  height: 20px;
+  background: #22c55e;
+  border: 3px solid #16a34a;
   border-radius: 50%;
-  opacity: 0.5;
+  opacity: 0.6;
   transform: translate(-50%, -50%);
 }
 .dark .circuit-node {
-  background: #3b82f6;
-  border-color: #93c5fd;
+  background: #4ade80;
+  border-color: #22c55e;
+}
+.circuit-component {
+  position: absolute;
+  background: #22c55e;
+  border: 3px solid #16a34a;
+  opacity: 0.6;
+  transform: translate(-50%, -50%);
+}
+.dark .circuit-component {
+  background: #4ade80;
+  border-color: #22c55e;
+}
+.component-cpu {
+  width: 48px;
+  height: 48px;
+}
+.component-capacitor {
+  width: 24px;
+  height: 40px;
+  border-radius: 4px;
+}
+.component-resistor {
+  width: 40px;
+  height: 16px;
+  border-radius: 3px;
+}
+.component-battery {
+  width: 32px;
+  height: 20px;
+  background: #dc2626;
+  border: 3px solid #991b1b;
+  border-radius: 2px;
+}
+.dark .component-battery {
+  background: #ef4444;
+  border-color: #dc2626;
+}
+.component-battery::before, .component-battery::after {
+  content: '';
+  position: absolute;
+  background: #991b1b;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.component-battery::before {
+  left: -6px;
+  width: 3px;
+  height: 12px;
+}
+.component-battery::after {
+  right: -6px;
+  width: 3px;
+  height: 8px;
 }
 .electron-particle {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   background: #ef4444;
   border-radius: 50%;
-  box-shadow: 0 0 4px #ef4444;
+  box-shadow: 0 0 6px #ef4444;
   opacity: 0;
   transform: translate(-50%, -50%);
 }
 .dark .electron-particle {
   background: #f87171;
-  box-shadow: 0 0 4px #f87171;
+  box-shadow: 0 0 6px #f87171;
 }
 .trace-active {
-  background: #fbbf24 !important;
+  background: #84cc16 !important;
   opacity: 0.8 !important;
-  box-shadow: 0 0 8px #f59e0b;
+  box-shadow: 0 0 10px #65a30d;
 }
-@property --tw-rotate-x {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-rotate-y {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-rotate-z {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-skew-x {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-skew-y {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-border-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
+.dark .trace-active {
+  background: #a3e635 !important;
+  box-shadow: 0 0 10px #84cc16;
 }
 @property --tw-gradient-position {
   syntax: "*";
@@ -706,28 +705,13 @@
   syntax: "*";
   inherits: false;
 }
-@property --tw-outline-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
 @property --tw-duration {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-ease {
   syntax: "*";
   inherits: false;
 }
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
-      --tw-rotate-x: initial;
-      --tw-rotate-y: initial;
-      --tw-rotate-z: initial;
-      --tw-skew-x: initial;
-      --tw-skew-y: initial;
-      --tw-border-style: solid;
       --tw-gradient-position: initial;
       --tw-gradient-from: #0000;
       --tw-gradient-via: #0000;
@@ -738,9 +722,7 @@
       --tw-gradient-via-position: 50%;
       --tw-gradient-to-position: 100%;
       --tw-font-weight: initial;
-      --tw-outline-style: solid;
       --tw-duration: initial;
-      --tw-ease: initial;
     }
   }
 }

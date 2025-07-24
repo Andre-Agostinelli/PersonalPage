@@ -161,33 +161,80 @@ links.forEach(link => {
 class CircuitSystem {
   constructor() {
     this.paths = [
-      // Path 1: Complex route
-      {
-        id: 'path1',
-        points: [
-          {x: 0, y: 25}, {x: 20, y: 25}, {x: 20, y: 15}, 
-          {x: 45, y: 15}, {x: 45, y: 30}, {x: 70, y: 30}
-        ],
-        speed: 8000 // 8 seconds
-      },
-      // Path 2: Different route
-      {
-        id: 'path2', 
-        points: [
-          {x: 0, y: 50}, {x: 35, y: 50}, {x: 35, y: 65},
-          {x: 60, y: 65}, {x: 60, y: 45}, {x: 80, y: 45}
-        ],
-        speed: 10000
-      },
-      // Path 3: Simple with branches
-      {
-        id: 'path3',
-        points: [
-          {x: 10, y: 75}, {x: 30, y: 75}, {x: 30, y: 80},
-          {x: 55, y: 80}, {x: 55, y: 70}, {x: 75, y: 70}
-        ],
-        speed: 9000
-      }
+        // Horizontal Line 1: Top - Battery to CPU (PRIORITY LINE)
+        {
+            id: 'path1',
+            points: [
+            {x: 10, y: 15}, {x: 22, y: 15}, {x: 22, y: 2},
+            {x: 28, y: 2}, {x: 28, y: 15}, {x: 90, y: 15}
+            ],
+            speed: 8000,
+            components: [
+            {type: 'battery', x: 10, y: 15},
+            {type: 'cpu', x: 90, y: 15}
+            ]
+        },
+        
+        // Vertical Line 1: Left - Battery to resistor (PRIORITY LINE) 
+        {
+            id: 'path2',
+            points: [
+            {x: 25, y: 5}, {x: 25, y: 85}
+            ],
+            speed: 9000,
+            components: [
+            {type: 'battery', x: 25, y: 5},
+            {type: 'resistor', x: 25, y: 85}
+            ]
+        },
+        
+        // Horizontal Line 2: Routes ABOVE path1, BEFORE path2 starts
+        {
+            id: 'path3',
+            points: [
+            {x: -5, y: 35}, {x: 20, y: 35}, {x: 20, y: 45}, 
+            {x: 75, y: 45}
+            ],
+            speed: 12000,
+            components: [
+            {type: 'capacitor', x: 75, y: 45}
+            ]
+        },
+        
+        // Horizontal Line 3: Routes BELOW path2's endpoint
+        {
+            id: 'path4',
+            points: [
+            {x: -5, y: 75}, {x: 20, y: 75}, {x: 20, y: 95},
+            {x: 105, y: 95}
+            ],
+            speed: 11000,
+            components: []
+        },
+        
+        // Vertical Line 2: Routes completely RIGHT of path1
+        {
+            id: 'path5',
+            points: [
+            {x: 95, y: -5}, {x: 95, y: 60}
+            ],
+            speed: 13000,
+            components: [
+            {type: 'cpu', x: 95, y: 60}
+            ]
+        },
+        
+        // Vertical Line 3: Routes between path2 and path5, avoids all horizontals
+        {
+            id: 'path6',
+            points: [
+            {x: 60, y: -5}, {x: 60, y: 10}, {x: 50, y: 10},
+            {x: 50, y: 25}, {x: 60, y: 25}, {x: 60, y: 30},
+            {x: 70, y: 30}, {x: 70, y: 105}
+            ],
+            speed: 15000,
+            components: []
+        }
     ];
     
     this.init();
@@ -216,20 +263,30 @@ class CircuitSystem {
       segment.dataset.pathId = path.id;
       segment.dataset.segmentId = i;
       
-      if (start.x === end.x) {
-        // Vertical segment
-        segment.style.left = `${start.x}%`;
+    if (start.x === end.x) {
+        // Vertical segment - particle travels down center
+        segment.style.left = `calc(${start.x}% - 2px)`; // Center 4px trace
         segment.style.top = `${Math.min(start.y, end.y)}%`;
-        segment.style.width = '2px';
+        segment.style.width = '4px';
         segment.style.height = `${Math.abs(end.y - start.y)}%`;
-      } else {
-        // Horizontal segment
+    } else {
+        // Horizontal segment - particle travels along center
         segment.style.left = `${Math.min(start.x, end.x)}%`;
-        segment.style.top = `${start.y}%`;
+        segment.style.top = `calc(${start.y}% - 2px)`; // Center 4px trace
         segment.style.width = `${Math.abs(end.x - start.x)}%`;
-        segment.style.height = '2px';
-      }
+        segment.style.height = '4px';
+    }
       
+        // Create components for this path
+    if (path.components) {
+    path.components.forEach(comp => {
+        const component = document.createElement('div');
+        component.className = `circuit-component component-${comp.type}`;
+        component.style.left = `${comp.x}%`;
+        component.style.top = `${comp.y}%`;
+        container.appendChild(component);
+        });
+    }
       container.appendChild(segment);
     }
     
@@ -252,44 +309,47 @@ class CircuitSystem {
     container.appendChild(particle);
     
     const animateAlongPath = () => {
-      particle.style.opacity = '1';
-      let currentSegment = 0;
-      const totalSegments = path.points.length - 1;
-      const segmentDuration = path.speed / totalSegments;
-      
-      const moveToNextPoint = () => {
-        if (currentSegment >= totalSegments) {
-          // Reset animation
-          particle.style.opacity = '0';
-          this.clearActiveTraces(path.id);
-          setTimeout(animateAlongPath, 2000); // Wait 2s before restart
-          return;
-        }
+        // Reset particle completely first
+        particle.style.transition = 'none';
+        particle.style.opacity = '0';
+        particle.style.left = `${path.points[0].x}%`;
+        particle.style.top = `${path.points[0].y}%`;
         
-        const start = path.points[currentSegment];
-        const end = path.points[currentSegment + 1];
+        // Force reflow to ensure position is set
+        particle.offsetHeight;
         
-        // Activate current trace segment
-        this.setActiveTrace(path.id, currentSegment, true);
-        if (currentSegment > 0) {
-          this.setActiveTrace(path.id, currentSegment - 1, false);
-        }
-        
-        // Animate particle
-        particle.style.transition = `all ${segmentDuration}ms linear`;
-        particle.style.left = `${end.x}%`;
-        particle.style.top = `${end.y}%`;
-        
-        currentSegment++;
-        setTimeout(moveToNextPoint, segmentDuration);
-      };
-      
-      // Start at first point
-      particle.style.left = `${path.points[0].x}%`;
-      particle.style.top = `${path.points[0].y}%`;
-      particle.style.transition = 'none';
-      
-      setTimeout(moveToNextPoint, 100);
+        setTimeout(() => {
+            particle.style.opacity = '1';
+            let currentSegment = 0;
+            const totalSegments = path.points.length - 1;
+            const segmentDuration = path.speed / totalSegments;
+            
+            const moveToNextPoint = () => {
+            if (currentSegment >= totalSegments) {
+                particle.style.opacity = '0';
+                this.clearActiveTraces(path.id);
+                setTimeout(animateAlongPath, 2000);
+                return;
+            }
+            
+            const start = path.points[currentSegment];
+            const end = path.points[currentSegment + 1];
+            
+            this.setActiveTrace(path.id, currentSegment, true);
+            if (currentSegment > 0) {
+                this.setActiveTrace(path.id, currentSegment - 1, false);
+            }
+            
+            particle.style.transition = `all ${segmentDuration}ms linear`;
+            particle.style.left = `${end.x}%`;
+            particle.style.top = `${end.y}%`;
+            
+            currentSegment++;
+            setTimeout(moveToNextPoint, segmentDuration);
+            };
+            
+            moveToNextPoint();
+            }, 100);
     };
     
     // Start with delay

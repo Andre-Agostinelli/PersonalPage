@@ -79,55 +79,127 @@
   overflow: hidden;
 }
 
-/* Dynamic circuit traces */
+/* Dynamic circuit traces - GREEN and THICKER */
 .circuit-trace-segment {
   position: absolute;
-  background: #1e40af;
-  opacity: 0.3;
+  background: #22c55e;
+  opacity: 0.4;
   transition: all 0.3s ease;
 }
 
 .dark .circuit-trace-segment {
-  background: #3b82f6;
+  background: #4ade80;
 }
 
-/* Connection nodes */
+/* Connection nodes - MUCH BIGGER */
 .circuit-node {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #1e40af;
-  border: 1px solid #60a5fa;
+  width: 20px;
+  height: 20px;
+  background: #22c55e;
+  border: 3px solid #16a34a;
   border-radius: 50%;
-  opacity: 0.5;
+  opacity: 0.6;
   transform: translate(-50%, -50%);
 }
 
 .dark .circuit-node {
-  background: #3b82f6;
-  border-color: #93c5fd;
+  background: #4ade80;
+  border-color: #22c55e;
 }
 
-/* Electron particles */
+/* Electronic components - MUCH BIGGER */
+.circuit-component {
+  position: absolute;
+  background: #22c55e;
+  border: 3px solid #16a34a;
+  opacity: 0.6;
+  transform: translate(-50%, -50%);
+}
+
+.dark .circuit-component {
+  background: #4ade80;
+  border-color: #22c55e;
+}
+
+.component-cpu {
+  width: 48px;
+  height: 48px;
+}
+
+.component-capacitor {
+  width: 24px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.component-resistor {
+  width: 40px;
+  height: 16px;
+  border-radius: 3px;
+}
+
+/* Battery component - DISTINCTIVE */
+.component-battery {
+  width: 32px;
+  height: 20px;
+  background: #dc2626;
+  border: 3px solid #991b1b;
+  border-radius: 2px;
+}
+
+.dark .component-battery {
+  background: #ef4444;
+  border-color: #dc2626;
+}
+
+/* Battery terminal markers */
+.component-battery::before,
+.component-battery::after {
+  content: '';
+  position: absolute;
+  background: #991b1b;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.component-battery::before {
+  left: -6px;
+  width: 3px;
+  height: 12px;
+}
+
+.component-battery::after {
+  right: -6px;
+  width: 3px;
+  height: 8px;
+}
+
+/* Electron particles - LARGER */
 .electron-particle {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   background: #ef4444;
   border-radius: 50%;
-  box-shadow: 0 0 4px #ef4444;
+  box-shadow: 0 0 6px #ef4444;
   opacity: 0;
   transform: translate(-50%, -50%);
 }
 
 .dark .electron-particle {
   background: #f87171;
-  box-shadow: 0 0 4px #f87171;
+  box-shadow: 0 0 6px #f87171;
 }
 
-/* Active trace glow */
+/* Active trace glow - GREEN */
 .trace-active {
-  background: #fbbf24 !important;
+  background: #84cc16 !important;
   opacity: 0.8 !important;
-  box-shadow: 0 0 8px #f59e0b;
+  box-shadow: 0 0 10px #65a30d;
+}
+
+.dark .trace-active {
+  background: #a3e635 !important;
+  box-shadow: 0 0 10px #84cc16;
 }
