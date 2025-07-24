@@ -222,12 +222,19 @@ class CircuitSystem {
         
     ];
     
+    this.animationIds = new Set(); // Track animation frames
+    this.timeouts = new Set(); // Track timeouts for cleanup
     this.init();
   }
   
   init() {
     const container = document.querySelector('.circuit-background');
     if (!container) return;
+    
+    // Ensure container has relative positioning for proper percentage calculations
+    if (getComputedStyle(container).position === 'static') {
+      container.style.position = 'relative';
+    }
     
     this.paths.forEach(path => {
       this.createPath(path, container);
@@ -247,33 +254,37 @@ class CircuitSystem {
       segment.className = 'circuit-trace-segment';
       segment.dataset.pathId = path.id;
       segment.dataset.segmentId = i;
+      // Ensure absolute positioning relative to container
+      segment.style.position = 'absolute';
       
-    if (start.x === end.x) {
+        if (start.x === end.x) {
         // Vertical segment - particle travels down center
         segment.style.left = `calc(${start.x}% - 2px)`; // Center 4px trace
         segment.style.top = `${Math.min(start.y, end.y)}%`;
         segment.style.width = '4px';
         segment.style.height = `${Math.abs(end.y - start.y)}%`;
-    } else {
+        } else {
         // Horizontal segment - particle travels along center
         segment.style.left = `${Math.min(start.x, end.x)}%`;
         segment.style.top = `calc(${start.y}% - 2px)`; // Center 4px trace
         segment.style.width = `${Math.abs(end.x - start.x)}%`;
         segment.style.height = '4px';
+        }
+    
+        container.appendChild(segment);
     }
-      
-        // Create components for this path
+
+    // Create components for this path
     if (path.components) {
-    path.components.forEach(comp => {
-        const component = document.createElement('div');
-        component.className = `circuit-component component-${comp.type}`;
-        component.style.left = `${comp.x}%`;
-        component.style.top = `${comp.y}%`;
-        container.appendChild(component);
+        path.components.forEach(comp => {
+            const component = document.createElement('div');
+            component.className = `circuit-component component-${comp.type}`;
+            component.style.position = 'absolute';
+            component.style.left = `${comp.x}%`;
+            component.style.top = `${comp.y}%`;
+            container.appendChild(component);
         });
-    }
-      container.appendChild(segment);
-    }
+    }    
     
     // Create connection nodes
     points.forEach((point, index) => {
@@ -281,64 +292,94 @@ class CircuitSystem {
       
       const node = document.createElement('div');
       node.className = 'circuit-node';
+      node.style.position = 'absolute';
       node.style.left = `${point.x}%`;
       node.style.top = `${point.y}%`;
       container.appendChild(node);
     });
   }
-  
-  animateParticle(path, container) {
+
+animateParticle(path, container) {
     const particle = document.createElement('div');
     particle.className = 'electron-particle';
     particle.dataset.pathId = path.id;
+    particle.style.position = 'absolute';
     container.appendChild(particle);
     
+    let animationActive = true;
+    
     const animateAlongPath = () => {
-        // Reset particle completely first
-        particle.style.transition = 'none';
-        particle.style.opacity = '0';
-        particle.style.left = `${path.points[0].x}%`;
-        particle.style.top = `${path.points[0].y}%`;
+      if (!animationActive) return;
+      
+      // Reset particle completely first
+      particle.style.transition = 'none';
+      particle.style.opacity = '0';
+      particle.style.left = `${path.points[0].x}%`;
+      particle.style.top = `${path.points[0].y}%`;
+      
+      // Use requestAnimationFrame instead of forcing reflow
+      const startAnimation = () => {
+        if (!animationActive) return;
         
-        // Force reflow to ensure position is set
-        particle.offsetHeight;
+        particle.style.opacity = '1';
+        let currentSegment = 0;
+        const totalSegments = path.points.length - 1;
+        const segmentDuration = path.speed / totalSegments;
         
-        setTimeout(() => {
-            particle.style.opacity = '1';
-            let currentSegment = 0;
-            const totalSegments = path.points.length - 1;
-            const segmentDuration = path.speed / totalSegments;
-            
-            const moveToNextPoint = () => {
-            if (currentSegment >= totalSegments) {
-                particle.style.opacity = '0';
-                this.clearActiveTraces(path.id);
-                setTimeout(animateAlongPath, 2000);
-                return;
-            }
-            
-            const start = path.points[currentSegment];
-            const end = path.points[currentSegment + 1];
-            
-            this.setActiveTrace(path.id, currentSegment, true);
-            if (currentSegment > 0) {
-                this.setActiveTrace(path.id, currentSegment - 1, false);
-            }
-            
-            particle.style.transition = `all ${segmentDuration}ms linear`;
-            particle.style.left = `${end.x}%`;
-            particle.style.top = `${end.y}%`;
-            
-            currentSegment++;
-            setTimeout(moveToNextPoint, segmentDuration);
-            };
-            
-            moveToNextPoint();
-            }, 100);
+        const moveToNextPoint = () => {
+          if (!animationActive || currentSegment >= totalSegments) {
+            particle.style.opacity = '0';
+            this.clearActiveTraces(path.id);
+            // Use setTimeout with cleanup tracking
+            const timeoutId = setTimeout(() => {
+              this.timeouts.delete(timeoutId);
+              if (animationActive) animateAlongPath();
+            }, 2000);
+            this.timeouts.add(timeoutId);
+            return;
+          }
+          
+          const start = path.points[currentSegment];
+          const end = path.points[currentSegment + 1];
+          
+          this.setActiveTrace(path.id, currentSegment, true);
+          if (currentSegment > 0) {
+            this.setActiveTrace(path.id, currentSegment - 1, false);
+          }
+          
+          particle.style.transition = `all ${segmentDuration}ms linear`;
+          particle.style.left = `${end.x}%`;
+          particle.style.top = `${end.y}%`;
+          
+          currentSegment++;
+          
+          // Use setTimeout with cleanup tracking
+          const timeoutId = setTimeout(() => {
+            this.timeouts.delete(timeoutId);
+            if (animationActive) moveToNextPoint();
+          }, segmentDuration);
+          this.timeouts.add(timeoutId);
+        };
+        
+        moveToNextPoint();
+      };
+      
+      // Use requestAnimationFrame for smoother animation start
+      const frameId = requestAnimationFrame(startAnimation);
+      this.animationIds.add(frameId);
     };
     
-    // Start with delay
-    setTimeout(animateAlongPath, Math.random() * 3000);
+    // Start with delay using tracked timeout
+    const initialTimeoutId = setTimeout(() => {
+      this.timeouts.delete(initialTimeoutId);
+      if (animationActive) animateAlongPath();
+    }, Math.random() * 3000);
+    this.timeouts.add(initialTimeoutId);
+    
+    // Store cleanup function for this particle
+    particle._cleanup = () => {
+      animationActive = false;
+    };
   }
   
   setActiveTrace(pathId, segmentId, active) {
@@ -356,12 +397,96 @@ class CircuitSystem {
     const segments = document.querySelectorAll(`[data-path-id="${pathId}"]`);
     segments.forEach(segment => segment.classList.remove('trace-active'));
   }
+  
+  // Cleanup method to call when destroying the circuit system
+  destroy() {
+    // Cancel all animation frames
+    this.animationIds.forEach(id => cancelAnimationFrame(id));
+    this.animationIds.clear();
+    
+    // Clear all timeouts
+    this.timeouts.forEach(id => clearTimeout(id));
+    this.timeouts.clear();
+    
+    // Cleanup particles
+    document.querySelectorAll('.electron-particle').forEach(particle => {
+      if (particle._cleanup) particle._cleanup();
+    });
+  }
 }
 
-// Initialize circuit system when DOM is ready
+// Add this to your existing DOMContentLoaded event listener
 document.addEventListener('DOMContentLoaded', () => {
-  // ... your existing DOMContentLoaded code ...
+  // Your existing circuit system code...
+  window.circuitSystem = new CircuitSystem();
   
-  // Add circuit system
-  new CircuitSystem();
+  // ADD THIS: Scroll-based navigation
+  const sections = document.querySelectorAll('.page');
+  const navLinks = document.querySelectorAll('nav a[data-page]');
+  
+  // Function to update active nav link
+  function updateActiveNav(activeSection) {
+    navLinks.forEach(link => {
+        // REMOVE both click active classes AND scroll classes from ALL links
+        activeTabClasses.forEach(cls => link.classList.remove(cls));
+        link.classList.remove('bg-slate-400', 'text-white', 'dark:bg-slate-500');
+        
+        // ADD back hover classes to all links first
+        hoverTabClasses.forEach(cls => link.classList.add(cls));
+        
+        if (link.dataset.page === activeSection) {
+        // Remove hover classes and add scroll active classes for current section
+        hoverTabClasses.forEach(cls => link.classList.remove(cls));
+        link.classList.add('bg-slate-400', 'text-white', 'dark:bg-slate-500');
+        }
+    });
+  }
+  
+  // Intersection Observer for scroll detection
+  const observerOptions = {
+    root: null,
+    rootMargin: '-50% 0px -50% 0px', // Trigger when section is 50% visible
+    threshold: 0
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const sectionId = entry.target.dataset.nav;
+        updateActiveNav(sectionId);
+      }
+    });
+  }, observerOptions);
+  
+  // Observe all sections
+  sections.forEach(section => observer.observe(section));
+  
+  // Update existing navbar click handlers to smooth scroll
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.dataset.page;
+      const targetSection = document.getElementById(targetId);
+      
+      if (targetSection) {
+        targetSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+  
+  // Handle visibility changes for better performance
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    // Page is hidden, animations will naturally pause
+  } else {
+    // Page is visible again, animations will resume
+  }
 });
+
+  // Set initial active state
+  updateActiveNav('home');
+});
+

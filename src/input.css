@@ -73,6 +73,54 @@
 } 
 */
 
+body {
+  /* your existing styles */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  padding-top: 80px; /* Adjust based on your navbar height */
+}
+
+/* Add to your existing CSS */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Update page sections to stack vertically instead of hiding */
+.page {
+  display: block !important; /* Override the hidden class */
+  min-height: 100vh;
+}
+
+/* Make navbar responsive */
+nav {
+  flex-wrap: wrap; /* Allow wrapping on very small screens */
+  position: fixed;  /* CHANGE from sticky to fixed */
+  top: 0;
+  left: 0;          /* ADD this */
+  right: 0;         /* ADD this - or use width: 100% */
+  z-index: 10;
+}
+
+nav ul {
+  gap: clamp(0.5rem, 2vw, 1.5rem); /* Responsive gap */
+}
+
+nav ul li a {
+  padding: clamp(0.25rem, 1vw, 0.75rem) clamp(0.5rem, 2vw, 0.75rem);
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+}
+
+/* Stack navbar on very small screens */
+@media (max-width: 640px) {
+  nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  nav ul {
+    justify-content: center;
+  }
+}
+
 /* Circuit background container */
 .circuit-background {
   position: relative;
