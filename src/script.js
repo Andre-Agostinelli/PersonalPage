@@ -161,7 +161,7 @@ links.forEach(link => {
 class CircuitSystem {
   constructor() {
     this.paths = [
-        // Top right lines
+        // Top right lines - JJust now realizing this wont scale (say user is viewing on iphoneXR dimensions)
         {
             id: 'path1',
             points: [
