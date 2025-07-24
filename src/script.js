@@ -161,49 +161,57 @@ links.forEach(link => {
 class CircuitSystem {
   constructor() {
     this.paths = [
-        // Horizontal Line 1: Top - Battery to CPU (PRIORITY LINE)
+        // Top right lines
         {
             id: 'path1',
             points: [
-            {x: 10, y: 15}, {x: 22, y: 15}, {x: 22, y: 2},
-            {x: 28, y: 2}, {x: 28, y: 15}, {x: 90, y: 15}
+            {x: 40, y: 0}, {x: 40, y:2}, {x: 50, y: 2}, {x: 50, y: 5}, {x: 70, y: 5}, {x: 70, y: 10},
+            {x: 95, y: 10}, {x: 95, y: 70}
             ],
             speed: 8000,
             components: [
-            {type: 'battery', x: 10, y: 15},
-            {type: 'cpu', x: 90, y: 15}
+            {type: 'cpu', x: 95, y: 70}
             ]
-        },
-        
-        // Vertical Line 1: Left - Battery to resistor (PRIORITY LINE) 
+        }, 
         {
             id: 'path2',
             points: [
-            {x: 25, y: 5}, {x: 25, y: 85}
+            {x: 60, y: 0}, {x: 60, y: 2}, {x: 72, y: 2}, {x: 72, y: 7}, {x: 97, y: 7}, {x: 97, y: 75},
+            {x: 90, y: 75}, {x: 90, y: 70}
             ],
-            speed: 9000,
+            speed: 8000,
             components: [
-            {type: 'battery', x: 25, y: 5},
-            {type: 'resistor', x: 25, y: 85}
+            {type: 'resistor', x: 90, y: 70}
             ]
         },
-        
-        // Horizontal Line 2: Routes ABOVE path1, BEFORE path2 starts
         {
             id: 'path3',
             points: [
-            {x: -5, y: 35}, {x: 20, y: 35}, {x: 20, y: 45}, 
-            {x: 75, y: 45}
+            {x: 74, y: 0}, {x: 74, y: 3}, {x: 99, y: 3}, {x: 99, y: 88}, {x: 97, y: 88}, {x: 97, y: 78}, {x: 95, y: 78},
+            {x: 95, y: 88}, {x: 93, y: 88}, {x: 93, y: 78}, {x: 91, y: 78}, {x: 91, y: 88}, {x: 87, y: 88}, {x: 87, y: 55},
+            {x: 90, y: 55} 
             ],
-            speed: 12000,
+            speed: 8000,
             components: [
-            {type: 'capacitor', x: 75, y: 45}
+            {type: 'capacitor', x: 99, y: 3},
+            {type: 'capacitor', x: 87, y: 55},
+            {type: 'resistor', x: 90, y: 55},
             ]
         },
-        
-        // Horizontal Line 3: Routes BELOW path2's endpoint
         {
             id: 'path4',
+            points: [
+            {x: 90, y: 60}, {x: 90, y: 65}, {x: 92, y: 65}, {x: 92, y: 60}, {x: 93, y: 60}, {x: 93, y: 13}, {x: 68, y: 13}, {x: 68, y: 7},
+            {x: 48, y: 7}, {x: 48, y: 4}, {x: 38, y: 4}, {x: 38, y: 0}
+            ],
+            speed: 8000,
+            components: [
+            {type: 'battery', x: 90, y: 60}
+            ]
+        }, 
+        // Bottom Left Points
+        {
+            id: 'path5',
             points: [
             {x: -5, y: 75}, {x: 20, y: 75}, {x: 20, y: 95},
             {x: 105, y: 95}
@@ -212,29 +220,6 @@ class CircuitSystem {
             components: []
         },
         
-        // Vertical Line 2: Routes completely RIGHT of path1
-        {
-            id: 'path5',
-            points: [
-            {x: 95, y: -5}, {x: 95, y: 60}
-            ],
-            speed: 13000,
-            components: [
-            {type: 'cpu', x: 95, y: 60}
-            ]
-        },
-        
-        // Vertical Line 3: Routes between path2 and path5, avoids all horizontals
-        {
-            id: 'path6',
-            points: [
-            {x: 60, y: -5}, {x: 60, y: 10}, {x: 50, y: 10},
-            {x: 50, y: 25}, {x: 60, y: 25}, {x: 60, y: 30},
-            {x: 70, y: 30}, {x: 70, y: 105}
-            ],
-            speed: 15000,
-            components: []
-        }
     ];
     
     this.init();
