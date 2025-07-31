@@ -167,6 +167,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         // AA: Having trouble here because I am first animating a fade in -> done with show and keyframes
         // then I need to know when done, so I can start glow animation
+        // I think the electron animation also needs to be updated to be reset to base position better so we dont have random electrons flying
         // subtitleText.addEventListener('onanimationend', () => {
         //     subtitleText.classList.add('pulse-glow');
         // }, { once: true });
