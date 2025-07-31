@@ -144,23 +144,48 @@ function initializePageAndTabs() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   document.body.style.overflow = 'hidden';
-  setInitialTheme(); // This stays the same
+  setInitialTheme();
   
   const typewriterElement = document.getElementById('typewriter-text');
+  const subtitleText = document.getElementById('subtitle-text');
   const clickText = document.getElementById('click-text');
   const splashScreen = document.getElementById('splash-screen');
   
   if (typewriterElement && splashScreen) {
-    // Start typewriter effect
+    // 1. Type the name (subtitle is invisible during this)
     await typewriterEffect(typewriterElement, "Hi, I'm Andre", 150);
+
+    // Brief pause to catch your breath after tyepwritter
+    // await new Promise(resolve => setTimeout(resolve, 800));
     
-    // Show click text after typing is done
+    // 2. Fade in glowing subtitle
+    if (subtitleText) {
+        subtitleText.classList.add('show');
+        if (subtitleText.opacity == 1) {
+            subtitleText.classList.remove("show");
+            subtitleText.classList.add('pulse-glow');
+        }
+        // AA: Having trouble here because I am first animating a fade in -> done with show and keyframes
+        // then I need to know when done, so I can start glow animation
+        // subtitleText.addEventListener('onanimationend', () => {
+        //     subtitleText.classList.add('pulse-glow');
+        // }, { once: true });
+
+        // subtitleText.classList.add('show');
+        // await new Promise(resolve => setTimeout(resolve, 1500));
+        // // subtitleText.classList.add('pulse-glow');
+    }
+    
+    // 3. Wait 2 seconds while subtitle glows
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // 4. Show click text
     if (clickText) {
       clickText.style.opacity = '1';
     }
     
-    // Auto-hide after 3 seconds or on click
-    const autoHideTimeout = setTimeout(hideSplashScreen, 3000);
+    // Auto-hide after 4 more seconds
+    const autoHideTimeout = setTimeout(hideSplashScreen, 4000);
     
     splashScreen.addEventListener('click', () => {
       clearTimeout(autoHideTimeout);
@@ -168,7 +193,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, { once: true });
   }
   
-  initializePageAndTabs(); // This stays the same
+  initializePageAndTabs();
 });
 
 // document.addEventListener('DOMContentLoaded', () => {
