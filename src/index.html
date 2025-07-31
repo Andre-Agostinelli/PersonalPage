@@ -8,13 +8,12 @@
 </head>
 <body class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 transition-colors duration-200 font-sans">
 
-  <div id="splash-screen" class="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center z-50 transition-opacity duration-700 opacity-100 cursor-pointer">
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-700 to-purple-800 animate-splash-bg"></div>
-    
-    <div class="relative z-10 text-center"> <h1 class="text-white text-5xl font-extrabold mb-4 animate-fade-in-up animation-delay-0">Welcome to Andre's Portfolio</h1>
-      <p class="text-white text-lg animate-fade-in-up animation-delay-500">Click anywhere to enter</p>
-    </div>
+<div id="splash-screen" class="fixed inset-0 bg-slate-100 dark:bg-slate-700 flex flex-col items-center justify-center z-50 transition-colors duration-200 cursor-pointer">
+  <div class="relative z-10 text-center">
+    <h1 id="typewriter-text" class="text-slate-800 dark:text-slate-200 text-5xl font-extrabold mb-4 min-h-[4rem]"></h1>
+    <p id="click-text" class="text-slate-600 dark:text-slate-400 text-lg opacity-0 transition-opacity duration-500">Click anywhere to continue</p>
   </div>
+</div>
 
   <header>
     <nav class="bg-slate-300 text-slate-800 dark:bg-slate-800 dark:text-slate-100 flex p-6 transition-colors duration-300 items-center justify-between">

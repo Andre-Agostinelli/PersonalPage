@@ -17,21 +17,53 @@ const hoverTabClasses = [
     'dark:hover:text-black',
 ];
 
-// Splash screen logic
-const splashScreen = document.getElementById('splash-screen');
+// function hideSplashScreen() {
+//     if (splashScreen) {
+//         splashScreen.classList.remove('opacity-100'); // Start fade-out
+//         splashScreen.classList.add('opacity-0');
+
+//         // Remove the splash screen from the DOM after the transition
+//         splashScreen.addEventListener('transitionend', () => {
+//             splashScreen.remove();
+//             // Ensure the body's overflow is reset if it was hidden for the splash screen
+//             document.body.style.overflow = ''; 
+//         }, { once: true }); // Use { once: true } to remove the listener after it fires
+//     }
+// }
+
+// Typewriter effect for splash screen
+function typewriterEffect(element, text, speed = 100) {
+  return new Promise((resolve) => {
+    let i = 0;
+    element.classList.add('typewriter-cursor');
+    
+    function type() {
+      if (i < text.length) {
+        element.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      } else {
+        // Remove cursor and resolve promise when done
+        element.classList.remove('typewriter-cursor');
+        resolve();
+      }
+    }
+    
+    type();
+  });
+}
 
 function hideSplashScreen() {
-    if (splashScreen) {
-        splashScreen.classList.remove('opacity-100'); // Start fade-out
-        splashScreen.classList.add('opacity-0');
-
-        // Remove the splash screen from the DOM after the transition
-        splashScreen.addEventListener('transitionend', () => {
-            splashScreen.remove();
-            // Ensure the body's overflow is reset if it was hidden for the splash screen
-            document.body.style.overflow = ''; 
-        }, { once: true }); // Use { once: true } to remove the listener after it fires
-    }
+  const splashScreen = document.getElementById('splash-screen');
+  if (splashScreen) {
+    splashScreen.style.opacity = '0';
+    splashScreen.style.transition = 'opacity 0.7s ease-out';
+    
+    setTimeout(() => {
+      splashScreen.remove();
+      document.body.style.overflow = '';
+    }, 700);
+  }
 }
 
 // Theme toggle button logic
@@ -110,29 +142,56 @@ function initializePageAndTabs() {
     });
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Hide body overflow while splash screen is visible
-    document.body.style.overflow = 'hidden'; 
-    // Initialize theme first
-    setInitialTheme();
-
-    if (splashScreen) {
-        // Add click listener to the splash screen to hide it
-        splashScreen.addEventListener('click', hideSplashScreen);
-
-        // Optional: Automatically hide splash screen after a few seconds if no click
-        // setTimeout(hideSplashScreen, 3000); // Hides after 3 seconds
+document.addEventListener('DOMContentLoaded', async () => {
+  document.body.style.overflow = 'hidden';
+  setInitialTheme(); // This stays the same
+  
+  const typewriterElement = document.getElementById('typewriter-text');
+  const clickText = document.getElementById('click-text');
+  const splashScreen = document.getElementById('splash-screen');
+  
+  if (typewriterElement && splashScreen) {
+    // Start typewriter effect
+    await typewriterEffect(typewriterElement, "Hi, I'm Andre", 150);
+    
+    // Show click text after typing is done
+    if (clickText) {
+      clickText.style.opacity = '1';
     }
     
-    // Initialize page and tabs ONLY after the splash screen is dismissed or ready to be dismissed
-    // If you want content to appear immediately after splash dismiss, call this in hideSplashScreen
-    // For now, it initializes on DOMContentLoaded.
-    // If you want content to appear *after* splash screen disappears, move initializePageAndTabs
-    // inside the transitionend listener in hideSplashScreen.
-    initializePageAndTabs(); 
+    // Auto-hide after 3 seconds or on click
+    const autoHideTimeout = setTimeout(hideSplashScreen, 3000);
+    
+    splashScreen.addEventListener('click', () => {
+      clearTimeout(autoHideTimeout);
+      hideSplashScreen();
+    }, { once: true });
+  }
+  
+  initializePageAndTabs(); // This stays the same
 });
 
+// document.addEventListener('DOMContentLoaded', () => {
+//     // Hide body overflow while splash screen is visible
+//     document.body.style.overflow = 'hidden'; 
+//     // Initialize theme first
+//     setInitialTheme();
+
+//     if (splashScreen) {
+//         // Add click listener to the splash screen to hide it
+//         splashScreen.addEventListener('click', hideSplashScreen);
+
+//         // Optional: Automatically hide splash screen after a few seconds if no click
+//         // setTimeout(hideSplashScreen, 3000); // Hides after 3 seconds
+//     }
+    
+//     // Initialize page and tabs ONLY after the splash screen is dismissed or ready to be dismissed
+//     // If you want content to appear immediately after splash dismiss, call this in hideSplashScreen
+//     // For now, it initializes on DOMContentLoaded.
+//     // If you want content to appear *after* splash screen disappears, move initializePageAndTabs
+//     // inside the transitionend listener in hideSplashScreen.
+//     initializePageAndTabs(); 
+// });
 
 // Add click listeners to navigation links (existing logic)
 links.forEach(link => {

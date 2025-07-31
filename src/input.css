@@ -3,75 +3,17 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Keyframes for text animation */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Typewriter cursor animation */
+.typewriter-cursor::after {
+  content: '|';
+  animation: blink 1s infinite;
+  margin-left: 2px;
 }
 
-/* Keyframes for splash screen background animation */
-@keyframes splash-bg-pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.05); /* Slightly expand */
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
-
-/* Custom Animation Utilities */
-.animate-fade-in-up {
-  animation: fade-in-up 0.7s ease-out forwards;
-}
-
-.animate-splash-bg {
-  animation: splash-bg-pulse 4s ease-in-out infinite; /* Continuous, subtle pulse */
-}
-
-.animation-delay-0 {
-    animation-delay: 0s; /* Explicitly set for welcome text */
-}
-
-.animation-delay-500 {
-    animation-delay: 0.5s; /* For click to enter text */
-}
-
-/* Keyframes for background grid animation (Home Page/Background)
-@keyframes move-grid {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 100% 100%; Adjust for desired direction
-  }
-} 
-*/
-
-/* Home Page Background Animation Utility */
-/* .animate-grid-background {
-  background-size: 100px 100px; // Size of your grid squares 
-  background-image: linear-gradient(to right, theme(colors.gray.300) 1px, transparent 1px),
-                    linear-gradient(to bottom, theme(colors.gray.300) 1px, transparent 1px);
-  animation: move-grid 20s linear infinite; // Adjust duration and timing as needed
-}
-
-.dark .animate-grid-background {
-  background-image: linear-gradient(to right, theme(colors.gray.700) 1px, transparent 1px),
-                    linear-gradient(to bottom, theme(colors.gray.700) 1px, transparent 1px);
-} 
-*/
 
 body {
   /* your existing styles */
