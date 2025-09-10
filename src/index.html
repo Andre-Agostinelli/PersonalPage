@@ -70,14 +70,78 @@
   </header>
 
   <main class="circuit-background min-h-screen">
-    <section id="home" class="page p-8 block min-h-screen" data-nav="home">
-      <h1 class="text-3xl font-bold mb-4">Welcome to My Portfolio</h1>
-      <p>This is the landing page!</p>
-    </section>
+    <section id="home" class="page p-8 block min-h-screen flex items-center justify-center" data-nav="home">
+      <div class="flex flex-col md:flex-row items-center gap-8 max-w-5xl w-full">
+        
+        <!-- Left: blurb text -->
+        <div class="flex-1 text-center md:text-left transform transition-all duration-700 ease-out translate-y-4 opacity-0 animate-fadeInUp">
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
+            Hey, I’m Andre 👋
+          </h1>
+          <p class="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 leading-relaxed">
+            I’m a software engineer passionate about building systems that bridge 
+            <span class="font-bold text-emerald-700 dark:text-emerald-300">hardware</span> and
+            <span class="font-bold text-emerald-700 dark:text-emerald-300">software</span>
+            Welcome to my portfolio where I share my projects, thoughts, and experience.
+          </p>
+        </div>
 
+        <!-- Right: profile image -->
+        <div class="flex-1 flex justify-center md:justify-end">
+          <img src="../resources/Composite2024.jpg"
+              alt="Photo of Andre"
+              class="rounded-2xl shadow-lg w-48 sm:w-64 md:w-80 transform transition-all duration-700 ease-out scale-95 hover:scale-100 hover:shadow-2xl animate-fadeIn" />
+        </div>
+      </div>
+  </section>
     <section id="about" class="page p-8 hidden min-h-screen" data-nav="about">
       <h1 class="text-3xl font-bold mb-4">About Me</h1>
       <p>Some details about who I am...</p>
+
+      <!-- Animated Skills Showcase -->
+      <div class="space-y-8 overflow-hidden relative">
+        <!-- Row 1 -->
+        <div class="w-full overflow-hidden">
+          <div class="flex gap-6 w-max animate-marquee">
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
+              <i class="devicon-cplusplus-plain"></i> <span>C++</span>
+            </div>
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
+              <i class="devicon-python-plain"></i> <span>Python</span>
+            </div>
+            <!-- repeat as needed -->
+          </div>
+        </div>
+
+        <!-- Row 2 (reverse) -->
+        <div class="w-full overflow-hidden">
+          <div class="flex gap-6 w-max animate-marquee-reverse">
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
+              <i class="devicon-linux-plain"></i> <span>Linux</span>
+            </div>
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
+              <i class="devicon-git-plain"></i> <span>Git</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Static skills grid for accessibility -->
+      <div class="mt-10">
+        <h2 class="text-xl font-bold mb-3">Skills (static reference)</h2>
+        <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-sm">
+          <li class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-center hover:font-bold">C++</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-center hover:font-bold">Python</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-center hover:font-bold">JavaScript</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-center hover:font-bold">React</li>
+          <!-- continue -->
+        </ul>
+      </div>
+
     </section>
 
     <section id="projects" class="page p-8 hidden min-h-screen" data-nav="projects">
