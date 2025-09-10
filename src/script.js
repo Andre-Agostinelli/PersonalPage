@@ -266,6 +266,7 @@ class CircuitSystem {
   constructor() {
     this.paths = [
         // Top right lines - JJust now realizing this wont scale (say user is viewing on iphoneXR dimensions)
+        // AA: Need to make relative or somehow better organize on screen for different viewing window/ viewing devices...
         {
             id: 'path1',
             points: [
