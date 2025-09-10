@@ -17,20 +17,6 @@ const hoverTabClasses = [
     'dark:hover:text-black',
 ];
 
-// function hideSplashScreen() {
-//     if (splashScreen) {
-//         splashScreen.classList.remove('opacity-100'); // Start fade-out
-//         splashScreen.classList.add('opacity-0');
-
-//         // Remove the splash screen from the DOM after the transition
-//         splashScreen.addEventListener('transitionend', () => {
-//             splashScreen.remove();
-//             // Ensure the body's overflow is reset if it was hidden for the splash screen
-//             document.body.style.overflow = ''; 
-//         }, { once: true }); // Use { once: true } to remove the listener after it fires
-//     }
-// }
-
 // Typewriter effect for splash screen
 function typewriterEffect(element, text, speed = 100) {
   return new Promise((resolve) => {
@@ -55,6 +41,8 @@ function typewriterEffect(element, text, speed = 100) {
 
 function hideSplashScreen() {
   const splashScreen = document.getElementById('splash-screen');
+  initializePageAndTabs();
+
   if (splashScreen) {
     splashScreen.style.opacity = '0';
     splashScreen.style.transition = 'opacity 0.7s ease-out';
@@ -114,6 +102,42 @@ if (themeToggleBtn) {
     });
 }
 
+document.addEventListener('DOMContentLoaded', async () => {
+  document.body.style.overflow = 'hidden';
+  setInitialTheme();
+  
+  const typewriterElement = document.getElementById('typewriter-text');
+  const subtitleText = document.getElementById('subtitle-text');
+  const clickText = document.getElementById('click-text');
+  const splashScreen = document.getElementById('splash-screen');
+  
+  if (typewriterElement && splashScreen) {
+    // 1. Type the name (subtitle is invisible during this)
+    await typewriterEffect(typewriterElement, "Hi, I'm Andre", 150);
+
+  // ------------------ ROBUST INLINE FADE (replace existing subtitle/click code) ------------------
+    // Use rAF so the browser registers the starting values, then flip to animated values
+    requestAnimationFrame(() => {
+      if (subtitleText) {
+        subtitleText.style.opacity = '1';
+        subtitleText.style.transform = 'translateY(0)';
+      }
+      if (clickText) {
+        clickText.style.opacity = '1';
+        clickText.style.transform = 'translateY(0)';
+        // add the flashing effect after fade-in completes
+        setTimeout(() => {
+          clickText.classList.add('flash');
+        }, 800); // wait for the fade duration (~0.7s) before flashing
+      }
+    });
+    
+    splashScreen.addEventListener('click', () => {
+      //clearTimeout(autoHideTimeout);
+      hideSplashScreen();
+    }, { once: true });
+  }
+});
 
 // Function to set the initial active tab and display the corresponding page
 function initializePageAndTabs() {
@@ -140,84 +164,79 @@ function initializePageAndTabs() {
             hoverTabClasses.forEach(cls => link.classList.add(cls));
         }
     });
-}
 
-document.addEventListener('DOMContentLoaded', async () => {
-  document.body.style.overflow = 'hidden';
-  setInitialTheme();
-  
-  const typewriterElement = document.getElementById('typewriter-text');
-  const subtitleText = document.getElementById('subtitle-text');
-  const clickText = document.getElementById('click-text');
-  const splashScreen = document.getElementById('splash-screen');
-  
-  if (typewriterElement && splashScreen) {
-    // 1. Type the name (subtitle is invisible during this)
-    await typewriterEffect(typewriterElement, "Hi, I'm Andre", 150);
-
-    // Brief pause to catch your breath after tyepwritter
-    // await new Promise(resolve => setTimeout(resolve, 800));
+    // Your existing circuit system code...
+    window.circuitSystem = new CircuitSystem();
     
-    // 2. Fade in glowing subtitle
-    if (subtitleText) {
-        subtitleText.classList.add('show');
-        if (subtitleText.opacity == 1) {
-            subtitleText.classList.remove("show");
-            subtitleText.classList.add('pulse-glow');
+    // ADD THIS: Scroll-based navigation
+    const sections = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('nav a[data-page]');
+    
+    // Function to update active nav link
+    function updateActiveNav(activeSection) {
+      navLinks.forEach(link => {
+          // REMOVE both click active classes AND scroll classes from ALL links
+          activeTabClasses.forEach(cls => link.classList.remove(cls));
+          link.classList.remove('bg-slate-400', 'text-white', 'dark:bg-slate-500');
+          
+          // ADD back hover classes to all links first
+          hoverTabClasses.forEach(cls => link.classList.add(cls));
+          
+          if (link.dataset.page === activeSection) {
+          // Remove hover classes and add scroll active classes for current section
+          hoverTabClasses.forEach(cls => link.classList.remove(cls));
+          link.classList.add('bg-slate-400', 'text-white', 'dark:bg-slate-500');
+          }
+      });
+    }
+    
+    // Intersection Observer for scroll detection
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px', // Trigger when section is 50% visible
+      threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.dataset.nav;
+          updateActiveNav(sectionId);
         }
-        // AA: Having trouble here because I am first animating a fade in -> done with show and keyframes
-        // then I need to know when done, so I can start glow animation
-        // I think the electron animation also needs to be updated to be reset to base position better so we dont have random electrons flying
-        // subtitleText.addEventListener('onanimationend', () => {
-        //     subtitleText.classList.add('pulse-glow');
-        // }, { once: true });
-
-        // subtitleText.classList.add('show');
-        // await new Promise(resolve => setTimeout(resolve, 1500));
-        // // subtitleText.classList.add('pulse-glow');
+      });
+    }, observerOptions);
+    
+    // Observe all sections
+    sections.forEach(section => observer.observe(section));
+    
+    // Update existing navbar click handlers to smooth scroll
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.dataset.page;
+        const targetSection = document.getElementById(targetId);
+        
+        if (targetSection) {
+          targetSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // Handle visibility changes for better performance
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      // Page is hidden, animations will naturally pause
+    } else {
+      // Page is visible again, animations will resume
     }
-    
-    // 3. Wait 2 seconds while subtitle glows
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // 4. Show click text
-    if (clickText) {
-      clickText.style.opacity = '1';
-    }
-    
-    // Auto-hide after 4 more seconds
-    const autoHideTimeout = setTimeout(hideSplashScreen, 4000);
-    
-    splashScreen.addEventListener('click', () => {
-      clearTimeout(autoHideTimeout);
-      hideSplashScreen();
-    }, { once: true });
-  }
-  
-  initializePageAndTabs();
-});
+  });
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     // Hide body overflow while splash screen is visible
-//     document.body.style.overflow = 'hidden'; 
-//     // Initialize theme first
-//     setInitialTheme();
-
-//     if (splashScreen) {
-//         // Add click listener to the splash screen to hide it
-//         splashScreen.addEventListener('click', hideSplashScreen);
-
-//         // Optional: Automatically hide splash screen after a few seconds if no click
-//         // setTimeout(hideSplashScreen, 3000); // Hides after 3 seconds
-//     }
-    
-//     // Initialize page and tabs ONLY after the splash screen is dismissed or ready to be dismissed
-//     // If you want content to appear immediately after splash dismiss, call this in hideSplashScreen
-//     // For now, it initializes on DOMContentLoaded.
-//     // If you want content to appear *after* splash screen disappears, move initializePageAndTabs
-//     // inside the transitionend listener in hideSplashScreen.
-//     initializePageAndTabs(); 
-// });
+    // Set initial active state
+    updateActiveNav('home');
+}
 
 // Add click listeners to navigation links (existing logic)
 links.forEach(link => {
@@ -499,79 +518,4 @@ animateParticle(path, container) {
     });
   }
 }
-
-// Add this to your existing DOMContentLoaded event listener
-document.addEventListener('DOMContentLoaded', () => {
-  // Your existing circuit system code...
-  window.circuitSystem = new CircuitSystem();
-  
-  // ADD THIS: Scroll-based navigation
-  const sections = document.querySelectorAll('.page');
-  const navLinks = document.querySelectorAll('nav a[data-page]');
-  
-  // Function to update active nav link
-  function updateActiveNav(activeSection) {
-    navLinks.forEach(link => {
-        // REMOVE both click active classes AND scroll classes from ALL links
-        activeTabClasses.forEach(cls => link.classList.remove(cls));
-        link.classList.remove('bg-slate-400', 'text-white', 'dark:bg-slate-500');
-        
-        // ADD back hover classes to all links first
-        hoverTabClasses.forEach(cls => link.classList.add(cls));
-        
-        if (link.dataset.page === activeSection) {
-        // Remove hover classes and add scroll active classes for current section
-        hoverTabClasses.forEach(cls => link.classList.remove(cls));
-        link.classList.add('bg-slate-400', 'text-white', 'dark:bg-slate-500');
-        }
-    });
-  }
-  
-  // Intersection Observer for scroll detection
-  const observerOptions = {
-    root: null,
-    rootMargin: '-50% 0px -50% 0px', // Trigger when section is 50% visible
-    threshold: 0
-  };
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const sectionId = entry.target.dataset.nav;
-        updateActiveNav(sectionId);
-      }
-    });
-  }, observerOptions);
-  
-  // Observe all sections
-  sections.forEach(section => observer.observe(section));
-  
-  // Update existing navbar click handlers to smooth scroll
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.dataset.page;
-      const targetSection = document.getElementById(targetId);
-      
-      if (targetSection) {
-        targetSection.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    });
-  });
-  
-  // Handle visibility changes for better performance
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    // Page is hidden, animations will naturally pause
-  } else {
-    // Page is visible again, animations will resume
-  }
-});
-
-  // Set initial active state
-  updateActiveNav('home');
-});
 

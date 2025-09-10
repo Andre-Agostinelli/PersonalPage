@@ -284,6 +284,9 @@
   .max-w-none {
     max-width: none;
   }
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
   .cursor-pointer {
     cursor: pointer;
   }
@@ -399,9 +402,6 @@
   .opacity-0 {
     opacity: 0%;
   }
-  .opacity-100 {
-    opacity: 100%;
-  }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, visibility, content-visibility, overlay, pointer-events;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -428,10 +428,6 @@
   .duration-400 {
     --tw-duration: 400ms;
     transition-duration: 400ms;
-  }
-  .duration-500 {
-    --tw-duration: 500ms;
-    transition-duration: 500ms;
   }
   .duration-700 {
     --tw-duration: 700ms;
@@ -589,83 +585,16 @@
     opacity: 0;
   }
 }
-#subtitle-text {
-  opacity: 0;
-  animation: none;
-}
-#subtitle-text.show {
-  animation: smooth-fade-in 1.5s ease-in-out forwards;
-}
-@keyframes smooth-fade-in {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-    text-shadow: none;
-  }
-  25% {
-    opacity: 0.2;
-    text-shadow: none;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  75% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.dark #subtitle-text.show {
-  animation: smooth-fade-in-dark 1.5s ease-in-out forwards;
-}
-@keyframes smooth-fade-in-dark {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-    text-shadow: none;
-  }
-  25% {
-    opacity: 0.2;
-    text-shadow: none;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  75% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes pulse-glow {
+@keyframes flash-opacity {
   0%, 100% {
-    text-shadow: 0 0 8px rgba(100, 116, 139, 0.4);
-    opacity: 0.7;
-  }
-  50% {
-    text-shadow: 0 0 25px rgba(100, 116, 139, 1), 0 0 35px rgba(100, 116, 139, 0.6), 0 0 45px rgba(100, 116, 139, 0.3);
     opacity: 1;
   }
-}
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-@keyframes pulse-glow-dark {
-  0%, 100% {
-    text-shadow: 0 0 8px rgba(148, 163, 184, 0.4);
-    opacity: 0.7;
-  }
   50% {
-    text-shadow: 0 0 25px rgba(148, 163, 184, 1), 0 0 35px rgba(148, 163, 184, 0.6), 0 0 45px rgba(148, 163, 184, 0.3);
-    opacity: 1;
+    opacity: 0.3;
   }
 }
-.dark .pulse-glow {
-  animation: pulse-glow-dark 2s ease-in-out infinite;
+.flash {
+  animation: flash-opacity 1.2s ease-in-out infinite;
 }
 body {
   overflow-x: hidden;
@@ -805,6 +734,26 @@ nav ul li a {
   background: #a3e635 !important;
   box-shadow: 0 0 10px #84cc16;
 }
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-font-weight {
   syntax: "*";
   inherits: false;
@@ -820,6 +769,11 @@ nav ul li a {
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
       --tw-font-weight: initial;
       --tw-duration: initial;
       --tw-ease: initial;

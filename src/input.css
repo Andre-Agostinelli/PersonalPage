@@ -15,93 +15,13 @@
   51%, 100% { opacity: 0; }
 }
 
-#subtitle-text {
-  opacity: 0;
-  animation: none;
+@keyframes flash-opacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
-#subtitle-text.show {
-  animation: smooth-fade-in 1.5s ease-in-out forwards;
-}
-
-@keyframes smooth-fade-in {
-  0% { 
-    opacity: 0; 
-    transform: translateY(10px);
-    text-shadow: none;
-  }
-  25% { 
-    opacity: 0.2;
-    text-shadow: none;
-  }
-  50% { 
-    opacity: 0.5;
-  }
-  75% { 
-    opacity: 0.8;
-  }
-  100% { 
-    opacity: 1; 
-    transform: translateY(0);
-  }
-}
-
-/* Dark mode version */
-.dark #subtitle-text.show {
-  animation: smooth-fade-in-dark 1.5s ease-in-out forwards;
-}
-
-@keyframes smooth-fade-in-dark {
-  0% { 
-    opacity: 0; 
-    transform: translateY(10px);
-    text-shadow: none;
-  }
-  25% { 
-    opacity: 0.2;
-    text-shadow: none;
-  }
-  50% { 
-    opacity: 0.5;
-  }
-  75% { 
-    opacity: 0.8;
-  }
-  100% { 
-    opacity: 1; 
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    text-shadow: 0 0 8px rgba(100, 116, 139, 0.4);
-    opacity: 0.7;
-  }
-  50% {
-    text-shadow: 0 0 25px rgba(100, 116, 139, 1), 0 0 35px rgba(100, 116, 139, 0.6), 0 0 45px rgba(100, 116, 139, 0.3);
-    opacity: 1;
-  }
-}
-
-/* Pulsing glow effect */
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow-dark {
-  0%, 100% {
-    text-shadow: 0 0 8px rgba(148, 163, 184, 0.4);
-    opacity: 0.7;
-  }
-  50% {
-    text-shadow: 0 0 25px rgba(148, 163, 184, 1), 0 0 35px rgba(148, 163, 184, 0.6), 0 0 45px rgba(148, 163, 184, 0.3);
-    opacity: 1;
-  }
-}
-
-.dark .pulse-glow {
-  animation: pulse-glow-dark 2s ease-in-out infinite;
+.flash {
+  animation: flash-opacity 1.2s ease-in-out infinite;
 }
 
 body {
@@ -151,6 +71,10 @@ nav ul li a {
     justify-content: center;
   }
 }
+
+
+/* --------------------------------------------------------------------------- CIRCUIT CUSTOM CSS ------------------------------------------------------------------------------- */
+
 
 /* Circuit background container */
 .circuit-background {
