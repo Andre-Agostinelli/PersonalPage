@@ -139,105 +139,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// Function to set the initial active tab and display the corresponding page
-function initializePageAndTabs() {
-    const initialPageId = 'home'; // Default to 'home' on load
-
-    pages.forEach(page => {
-        page.classList.add('hidden');
-        page.classList.remove('block');
-    });
-
-    const initialPage = document.getElementById(initialPageId);
-    if (initialPage) {
-        initialPage.classList.remove('hidden');
-        initialPage.classList.add('block');
-    }
-
-    links.forEach(link => {
-        activeTabClasses.forEach(cls => link.classList.remove(cls));
-        hoverTabClasses.forEach(cls => link.classList.remove(cls));
-
-        if (link.getAttribute('data-page') === initialPageId) {
-            activeTabClasses.forEach(cls => link.classList.add(cls));
-        } else {
-            hoverTabClasses.forEach(cls => link.classList.add(cls));
-        }
-    });
-
-    // Your existing circuit system code...
-    window.circuitSystem = new CircuitSystem();
-    
-    // ADD THIS: Scroll-based navigation
-    const sections = document.querySelectorAll('.page');
-    const navLinks = document.querySelectorAll('nav a[data-page]');
-    
-    // Function to update active nav link
-    function updateActiveNav(activeSection) {
-      navLinks.forEach(link => {
-          // REMOVE both click active classes AND scroll classes from ALL links
-          activeTabClasses.forEach(cls => link.classList.remove(cls));
-          link.classList.remove('bg-slate-400', 'text-white', 'dark:bg-slate-500');
-          
-          // ADD back hover classes to all links first
-          hoverTabClasses.forEach(cls => link.classList.add(cls));
-          
-          if (link.dataset.page === activeSection) {
-          // Remove hover classes and add scroll active classes for current section
-          hoverTabClasses.forEach(cls => link.classList.remove(cls));
-          link.classList.add('bg-slate-400', 'text-white', 'dark:bg-slate-500');
-          }
-      });
-    }
-    
-    // Intersection Observer for scroll detection
-    const observerOptions = {
-      root: null,
-      rootMargin: '-50% 0px -50% 0px', // Trigger when section is 50% visible
-      threshold: 0
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const sectionId = entry.target.dataset.nav;
-          updateActiveNav(sectionId);
-        }
-      });
-    }, observerOptions);
-    
-    // Observe all sections
-    sections.forEach(section => observer.observe(section));
-    
-    // Update existing navbar click handlers to smooth scroll
-    navLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.dataset.page;
-        const targetSection = document.getElementById(targetId);
-        
-        if (targetSection) {
-          targetSection.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
-    
-    // Handle visibility changes for better performance
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      // Page is hidden, animations will naturally pause
-    } else {
-      // Page is visible again, animations will resume
-    }
-  });
-
-    // Set initial active state
-    updateActiveNav('home');
-}
-
 // Add click listeners to navigation links (existing logic)
 links.forEach(link => {
     link.addEventListener('click', e => {
@@ -261,262 +162,180 @@ links.forEach(link => {
     });
 });
 
-// Circuit Animation System
-class CircuitSystem {
+// ---- Enhanced Global WaveField Background ---- //
+class WaveField {
   constructor() {
-    this.paths = [
-        // Top right lines - JJust now realizing this wont scale (say user is viewing on iphoneXR dimensions)
-        // AA: Need to make relative or somehow better organize on screen for different viewing window/ viewing devices...
-        {
-            id: 'path1',
-            points: [
-            {x: 40, y: 0}, {x: 40, y:2}, {x: 50, y: 2}, {x: 50, y: 5}, {x: 70, y: 5}, {x: 70, y: 10},
-            {x: 95, y: 10}, {x: 95, y: 70}
-            ],
-            speed: 8000,
-            components: [
-            {type: 'cpu', x: 95, y: 70}
-            ]
-        }, 
-        {
-            id: 'path2',
-            points: [
-            {x: 60, y: 0}, {x: 60, y: 2}, {x: 72, y: 2}, {x: 72, y: 7}, {x: 97, y: 7}, {x: 97, y: 75},
-            {x: 90, y: 75}, {x: 90, y: 70}
-            ],
-            speed: 8000,
-            components: [
-            {type: 'resistor', x: 90, y: 70}
-            ]
-        },
-        {
-            id: 'path3',
-            points: [
-            {x: 74, y: 0}, {x: 74, y: 3}, {x: 99, y: 3}, {x: 99, y: 88}, {x: 97, y: 88}, {x: 97, y: 78}, {x: 95, y: 78},
-            {x: 95, y: 88}, {x: 93, y: 88}, {x: 93, y: 78}, {x: 91, y: 78}, {x: 91, y: 88}, {x: 87, y: 88}, {x: 87, y: 55},
-            {x: 90, y: 55} 
-            ],
-            speed: 8000,
-            components: [
-            {type: 'capacitor', x: 99, y: 3},
-            {type: 'capacitor', x: 87, y: 55},
-            {type: 'resistor', x: 90, y: 55},
-            ]
-        },
-        {
-            id: 'path4',
-            points: [
-            {x: 90, y: 60}, {x: 90, y: 65}, {x: 92, y: 65}, {x: 92, y: 60}, {x: 93, y: 60}, {x: 93, y: 13}, {x: 68, y: 13}, {x: 68, y: 7},
-            {x: 48, y: 7}, {x: 48, y: 4}, {x: 38, y: 4}, {x: 38, y: 0}
-            ],
-            speed: 8000,
-            components: [
-            {type: 'battery', x: 90, y: 60}
-            ]
-        }, 
-        // Bottom Left Points
-        {
-            id: 'path5',
-            points: [
-            {x: -5, y: 75}, {x: 20, y: 75}, {x: 20, y: 95},
-            {x: 105, y: 95}
-            ],
-            speed: 11000,
-            components: []
-        },
-        
-    ];
-    
-    this.animationIds = new Set(); // Track animation frames
-    this.timeouts = new Set(); // Track timeouts for cleanup
-    this.init();
-  }
-  
-  init() {
-    const container = document.querySelector('.circuit-background');
-    if (!container) return;
-    
-    // Ensure container has relative positioning for proper percentage calculations
-    if (getComputedStyle(container).position === 'static') {
-      container.style.position = 'relative';
-    }
-    
-    this.paths.forEach(path => {
-      this.createPath(path, container);
-      this.animateParticle(path, container);
-    });
-  }
-  
-  createPath(path, container) {
-    const points = path.points;
-    
-    // Create trace segments
-    for (let i = 0; i < points.length - 1; i++) {
-      const start = points[i];
-      const end = points[i + 1];
-      
-      const segment = document.createElement('div');
-      segment.className = 'circuit-trace-segment';
-      segment.dataset.pathId = path.id;
-      segment.dataset.segmentId = i;
-      // Ensure absolute positioning relative to container
-      segment.style.position = 'absolute';
-      
-        if (start.x === end.x) {
-        // Vertical segment - particle travels down center
-        segment.style.left = `calc(${start.x}% - 2px)`; // Center 4px trace
-        segment.style.top = `${Math.min(start.y, end.y)}%`;
-        segment.style.width = '4px';
-        segment.style.height = `${Math.abs(end.y - start.y)}%`;
-        } else {
-        // Horizontal segment - particle travels along center
-        segment.style.left = `${Math.min(start.x, end.x)}%`;
-        segment.style.top = `calc(${start.y}% - 2px)`; // Center 4px trace
-        segment.style.width = `${Math.abs(end.x - start.x)}%`;
-        segment.style.height = '4px';
-        }
-    
-        container.appendChild(segment);
-    }
+    this.canvas = document.createElement('canvas');
+    this.canvas.id = 'wave-field';
+    this.ctx = this.canvas.getContext('2d');
 
-    // Create components for this path
-    if (path.components) {
-        path.components.forEach(comp => {
-            const component = document.createElement('div');
-            component.className = `circuit-component component-${comp.type}`;
-            component.style.position = 'absolute';
-            component.style.left = `${comp.x}%`;
-            component.style.top = `${comp.y}%`;
-            container.appendChild(component);
+    document.body.prepend(this.canvas);
+    Object.assign(this.canvas.style, {
+      position: 'fixed',
+      inset: 0,
+      width: '100%',
+      height: '100%',
+      zIndex: '-1',
+      pointerEvents: 'none',
+    });
+
+    this.mouse = { x: 0.5, y: 0.5 };
+    this.phase = 0;
+    this.bands = 3; // number of stacked wave bands
+    this.wavesPerBand = 3;
+    this.resize();
+    this.setupWaves();
+    this.bindEvents();
+    this.animate();
+  }
+
+  setupWaves() {
+    const isDark = document.body.classList.contains('dark');
+    const baseColors = isDark
+      ? ['#5eead4', '#2dd4bf', '#67e8f9']
+      : ['#22c55e', '#16a34a', '#4ade80'];
+
+    this.waves = [];
+    const bandHeight = this.height / this.bands;
+    for (let b = 0; b < this.bands; b++) {
+      for (let i = 0; i < this.wavesPerBand; i++) {
+        this.waves.push({
+          bandIndex: b,
+          amplitude: bandHeight / (3 + i), // stronger amplitude than before
+          wavelength: 200 + i * 60,
+          speed: 0.015 + i * 0.006,
+          direction: (b + i) % 2 === 0 ? 1 : -1, // alternate direction
+          color: baseColors[(b + i) % baseColors.length],
+          alpha: 0.22 - i * 0.03,
+          phaseOffset: Math.random() * Math.PI * 2,
+          isCos: (b + i) % 2 === 0, // alternate sine/cos
         });
-    }    
-    
-    // Create connection nodes
-    points.forEach((point, index) => {
-      if (index === 0 || index === points.length - 1) return; // Skip start/end
-      
-      const node = document.createElement('div');
-      node.className = 'circuit-node';
-      node.style.position = 'absolute';
-      node.style.left = `${point.x}%`;
-      node.style.top = `${point.y}%`;
-      container.appendChild(node);
-    });
-  }
-
-animateParticle(path, container) {
-    const particle = document.createElement('div');
-    particle.className = 'electron-particle';
-    particle.dataset.pathId = path.id;
-    particle.style.position = 'absolute';
-    container.appendChild(particle);
-    
-    let animationActive = true;
-    
-    const animateAlongPath = () => {
-      if (!animationActive) return;
-      
-      // Reset particle completely first
-      particle.style.transition = 'none';
-      particle.style.opacity = '0';
-      particle.style.left = `${path.points[0].x}%`;
-      particle.style.top = `${path.points[0].y}%`;
-      
-      // Use requestAnimationFrame instead of forcing reflow
-      const startAnimation = () => {
-        if (!animationActive) return;
-        
-        particle.style.opacity = '1';
-        let currentSegment = 0;
-        const totalSegments = path.points.length - 1;
-        const segmentDuration = path.speed / totalSegments;
-        
-        const moveToNextPoint = () => {
-          if (!animationActive || currentSegment >= totalSegments) {
-            particle.style.opacity = '0';
-            this.clearActiveTraces(path.id);
-            // Use setTimeout with cleanup tracking
-            const timeoutId = setTimeout(() => {
-              this.timeouts.delete(timeoutId);
-              if (animationActive) animateAlongPath();
-            }, 2000);
-            this.timeouts.add(timeoutId);
-            return;
-          }
-          
-          const start = path.points[currentSegment];
-          const end = path.points[currentSegment + 1];
-          
-          this.setActiveTrace(path.id, currentSegment, true);
-          if (currentSegment > 0) {
-            this.setActiveTrace(path.id, currentSegment - 1, false);
-          }
-          
-          particle.style.transition = `all ${segmentDuration}ms linear`;
-          particle.style.left = `${end.x}%`;
-          particle.style.top = `${end.y}%`;
-          
-          currentSegment++;
-          
-          // Use setTimeout with cleanup tracking
-          const timeoutId = setTimeout(() => {
-            this.timeouts.delete(timeoutId);
-            if (animationActive) moveToNextPoint();
-          }, segmentDuration);
-          this.timeouts.add(timeoutId);
-        };
-        
-        moveToNextPoint();
-      };
-      
-      // Use requestAnimationFrame for smoother animation start
-      const frameId = requestAnimationFrame(startAnimation);
-      this.animationIds.add(frameId);
-    };
-    
-    // Start with delay using tracked timeout
-    const initialTimeoutId = setTimeout(() => {
-      this.timeouts.delete(initialTimeoutId);
-      if (animationActive) animateAlongPath();
-    }, Math.random() * 3000);
-    this.timeouts.add(initialTimeoutId);
-    
-    // Store cleanup function for this particle
-    particle._cleanup = () => {
-      animationActive = false;
-    };
-  }
-  
-  setActiveTrace(pathId, segmentId, active) {
-    const segment = document.querySelector(`[data-path-id="${pathId}"][data-segment-id="${segmentId}"]`);
-    if (segment) {
-      if (active) {
-        segment.classList.add('trace-active');
-      } else {
-        segment.classList.remove('trace-active');
       }
     }
   }
-  
-  clearActiveTraces(pathId) {
-    const segments = document.querySelectorAll(`[data-path-id="${pathId}"]`);
-    segments.forEach(segment => segment.classList.remove('trace-active'));
+
+  bindEvents() {
+    window.addEventListener('resize', this.debouncedResize.bind(this));
+    document.addEventListener('mousemove', e => {
+      this.mouse.x = e.clientX / window.innerWidth;
+      this.mouse.y = e.clientY / window.innerHeight;
+    });
+    document.addEventListener('touchmove', e => {
+      if (e.touches[0]) {
+        this.mouse.x = e.touches[0].clientX / window.innerWidth;
+        this.mouse.y = e.touches[0].clientY / window.innerHeight;
+      }
+    });
+    const observer = new MutationObserver(() => this.setupWaves());
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
   }
-  
-  // Cleanup method to call when destroying the circuit system
-  destroy() {
-    // Cancel all animation frames
-    this.animationIds.forEach(id => cancelAnimationFrame(id));
-    this.animationIds.clear();
-    
-    // Clear all timeouts
-    this.timeouts.forEach(id => clearTimeout(id));
-    this.timeouts.clear();
-    
-    // Cleanup particles
-    document.querySelectorAll('.electron-particle').forEach(particle => {
-      if (particle._cleanup) particle._cleanup();
+
+  debouncedResize() {
+    clearTimeout(this._resizeTimeout);
+    this._resizeTimeout = setTimeout(() => this.resize(), 150);
+  }
+
+  resize() {
+    this.width = this.canvas.width = window.innerWidth;
+    this.height = this.canvas.height = window.innerHeight;
+    this.setupWaves();
+  }
+
+animate() {
+  this.draw();
+  requestAnimationFrame(() => this.animate());
+}
+
+draw() {
+  const ctx = this.ctx;
+  ctx.clearRect(0, 0, this.width, this.height);
+
+  const ampReact = 1 + (this.mouse.y - 0.5) * 0.8;
+  const phaseReact = (this.mouse.x - 0.5) * Math.PI;
+
+  this.waves.forEach(wave => {
+    ctx.beginPath();
+    const bandTop = (wave.bandIndex + 0.5) * (this.height / this.bands);
+
+    // constant drift left/right + mouse phase shift
+    wave.phaseOffset += wave.speed * wave.direction * 0.4;
+
+    const phaseShift =
+      wave.phaseOffset + phaseReact * 1.5; // keep mouse effect strong
+
+    const fn = wave.isCos ? Math.cos : Math.sin;
+    for (let x = 0; x <= this.width; x++) {
+      const y =
+        bandTop +
+        fn((x / wave.wavelength) * 2 * Math.PI + phaseShift) *
+          wave.amplitude *
+          ampReact;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+
+    ctx.strokeStyle = this.applyAlpha(wave.color, wave.alpha);
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+}
+
+  applyAlpha(hex, alpha) {
+    const rgb = parseInt(hex.slice(1), 16);
+    const r = (rgb >> 16) & 255;
+    const g = (rgb >> 8) & 255;
+    const b = rgb & 255;
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+}
+
+// attach once during initialization
+function initializePageAndTabs() {
+  const initialPageId = 'home';
+  pages.forEach(p => { p.classList.add('hidden'); p.classList.remove('block'); });
+  const initialPage = document.getElementById(initialPageId);
+  if (initialPage) { initialPage.classList.remove('hidden'); initialPage.classList.add('block'); }
+
+  links.forEach(link => {
+    activeTabClasses.forEach(c => link.classList.remove(c));
+    hoverTabClasses.forEach(c => link.classList.remove(c));
+    if (link.dataset.page === initialPageId) activeTabClasses.forEach(c => link.classList.add(c));
+    else hoverTabClasses.forEach(c => link.classList.add(c));
+  });
+
+  // Global persistent background
+  if (!window.waveField) window.waveField = new WaveField();
+
+  // Scroll detection stays identical
+  const sections = document.querySelectorAll('.page');
+  const navLinks = document.querySelectorAll('nav a[data-page]');
+  function updateActiveNav(activeSection) {
+    navLinks.forEach(link => {
+      activeTabClasses.forEach(c => link.classList.remove(c));
+      link.classList.remove('bg-slate-400', 'text-white', 'dark:bg-slate-500');
+      hoverTabClasses.forEach(c => link.classList.add(c));
+      if (link.dataset.page === activeSection) {
+        hoverTabClasses.forEach(c => link.classList.remove(c));
+        link.classList.add('bg-slate-400', 'text-white', 'dark:bg-slate-500');
+      }
     });
   }
+  const observerOptions = { root: null, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) updateActiveNav(entry.target.dataset.nav);
+    });
+  }, observerOptions);
+  sections.forEach(section => observer.observe(section));
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(link.dataset.page);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  updateActiveNav('home');
 }
 

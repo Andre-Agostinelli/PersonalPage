@@ -47,7 +47,6 @@
     --radius-xl: 0.75rem;
     --radius-2xl: 1rem;
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -205,20 +204,11 @@
   .invisible {
     visibility: hidden;
   }
-  .visible {
-    visibility: visible;
-  }
-  .absolute {
-    position: absolute;
-  }
   .fixed {
     position: fixed;
   }
   .relative {
     position: relative;
-  }
-  .static {
-    position: static;
   }
   .inset-0 {
     inset: calc(var(--spacing) * 0);
@@ -228,24 +218,6 @@
   }
   .z-50 {
     z-index: 50;
-  }
-  .container {
-    width: 100%;
-    @media (width >= 40rem) {
-      max-width: 40rem;
-    }
-    @media (width >= 48rem) {
-      max-width: 48rem;
-    }
-    @media (width >= 64rem) {
-      max-width: 64rem;
-    }
-    @media (width >= 80rem) {
-      max-width: 80rem;
-    }
-    @media (width >= 96rem) {
-      max-width: 96rem;
-    }
   }
   .mx-auto {
     margin-inline: auto;
@@ -337,6 +309,9 @@
   }
   .cursor-pointer {
     cursor: pointer;
+  }
+  .resize {
+    resize: both;
   }
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -860,108 +835,13 @@ nav ul li a {
     justify-content: center;
   }
 }
-.circuit-background {
-  position: relative;
-  overflow: hidden;
-}
-.circuit-trace-segment {
-  position: absolute;
-  background: #22c55e;
-  opacity: 0.4;
-  transition: all 0.3s ease;
-}
-.dark .circuit-trace-segment {
-  background: #4ade80;
-}
-.circuit-node {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: #22c55e;
-  border: 3px solid #16a34a;
-  border-radius: 50%;
-  opacity: 0.6;
-  transform: translate(-50%, -50%);
-}
-.dark .circuit-node {
-  background: #4ade80;
-  border-color: #22c55e;
-}
-.circuit-component {
-  position: absolute;
-  background: #22c55e;
-  border: 3px solid #16a34a;
-  opacity: 0.6;
-  transform: translate(-50%, -50%);
-}
-.dark .circuit-component {
-  background: #4ade80;
-  border-color: #22c55e;
-}
-.component-cpu {
-  width: 48px;
-  height: 48px;
-}
-.component-capacitor {
-  width: 24px;
-  height: 40px;
-  border-radius: 4px;
-}
-.component-resistor {
-  width: 40px;
-  height: 16px;
-  border-radius: 3px;
-}
-.component-battery {
-  width: 32px;
-  height: 20px;
-  background: #dc2626;
-  border: 3px solid #991b1b;
-  border-radius: 2px;
-}
-.dark .component-battery {
-  background: #ef4444;
-  border-color: #dc2626;
-}
-.component-battery::before, .component-battery::after {
-  content: '';
-  position: absolute;
-  background: #991b1b;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.component-battery::before {
-  left: -6px;
-  width: 3px;
-  height: 12px;
-}
-.component-battery::after {
-  right: -6px;
-  width: 3px;
-  height: 8px;
-}
-.electron-particle {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background: #ef4444;
-  border-radius: 50%;
-  box-shadow: 0 0 6px #ef4444;
-  opacity: 0;
-  transform: translate(-50%, -50%);
-}
-.dark .electron-particle {
-  background: #f87171;
-  box-shadow: 0 0 6px #f87171;
-}
-.trace-active {
-  background: #84cc16 !important;
-  opacity: 0.8 !important;
-  box-shadow: 0 0 10px #65a30d;
-}
-.dark .trace-active {
-  background: #a3e635 !important;
-  box-shadow: 0 0 10px #84cc16;
+#wave-field {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 @property --tw-translate-x {
   syntax: "*";
