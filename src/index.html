@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Andre's Portfolio Page</title>
   <link rel="stylesheet" href="./output.css" />
+  <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 </head>
 <body class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 transition-colors duration-200 font-sans">
 
@@ -86,7 +87,7 @@
           <p class="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed">
             I’m a software engineer passionate about building systems that bridge 
             <span class="font-bold text-emerald-700 dark:text-emerald-300">hardware</span> and
-            <span class="font-bold text-emerald-700 dark:text-emerald-300">software</span>
+            <span class="font-bold text-emerald-700 dark:text-emerald-300">software.</span>
             Welcome to my portfolio where I share my projects, thoughts, experience, and really anything!
           </p>
         </div>
@@ -94,24 +95,39 @@
         <div class="flex-1 flex justify-center">
           <img src="../resources/Composite2024.jpg"
               alt="Photo of Andre"
-              class="rounded-2xl shadow-lg w-48 sm:w-64 md:w-80 lg:w-96 transform transition-all duration-700 ease-out scale-95 hover:scale-100 hover:shadow-2xl animate-fadeIn" />
+              class="rounded-2xl sm:w-64 md:w-80 lg:w-96 transform transition-all duration-700 ease-out scale-95 hover:scale-110 hover:shadow-2xl hover:shadow-emerald-600" />
         </div>
       </div>
   </section>
     <section id="about" class="page p-8 hidden min-h-screen" data-nav="about">
       <h1 class="text-3xl font-bold mb-4">About Me</h1>
-      <p>Some details about who I am...</p>
-
+      <p>Skills include: ...</p>
       <!-- Animated Skills Showcase -->
       <div class="space-y-8 overflow-hidden relative">
         <!-- Row 1 -->
         <div class="w-full overflow-hidden">
           <div class="flex gap-6 w-max animate-marquee">
-            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
+              <i class="devicon-c-plain"></i> <span>C</span>
+            </div>
+            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
+              <i class="devicon-csharp-plain"></i> <span>C#</span>
+            </div>
+            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
                         text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
               <i class="devicon-cplusplus-plain"></i> <span>C++</span>
             </div>
-            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
+              <i class="devicon-java-plain"></i> <span>Java</span>
+            </div>
+            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
+              <i class="devicon-sql-plain"></i> <span>SQL</span>
+            </div>
+            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
                         text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
               <i class="devicon-python-plain"></i> <span>Python</span>
             </div>
@@ -122,11 +138,11 @@
         <!-- Row 2 (reverse) -->
         <div class="w-full overflow-hidden">
           <div class="flex gap-6 w-max animate-marquee-reverse">
-            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
                         text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
               <i class="devicon-linux-plain"></i> <span>Linux</span>
             </div>
-            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
+            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
                         text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
               <i class="devicon-git-plain"></i> <span>Git</span>
             </div>
