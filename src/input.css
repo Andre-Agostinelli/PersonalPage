@@ -81,7 +81,7 @@ html {
 
 /* Make navbar responsive */
 nav {
-  flex-wrap: wrap; /* Allow wrapping on very small screens */
+  flex-wrap: wrap; 
   position: fixed;  /* CHANGE from sticky to fixed */
   top: 0;
   left: 0;          /* ADD this */
