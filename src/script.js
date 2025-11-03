@@ -332,7 +332,13 @@ function initializePageAndTabs() {
     link.addEventListener('click', e => {
       e.preventDefault();
       const target = document.getElementById(link.dataset.page);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (target) {
+        // dynamically calculates header hieght and therefore respective scroll height necessary
+        const headerHeight = document.querySelector('nav').offsetHeight;
+        // target page top y + scrolled y pixels - header height = resulting top of section
+        const targetY = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      };
     });
   });
 
