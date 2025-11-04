@@ -64,6 +64,72 @@
   animation-play-state: paused;
 }
 
+/* --- Enhanced marquee system --- */
+.marquee-row {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(1rem, 3vw, 2rem);
+  width: max-content;
+  animation: marquee-scroll 20s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Hover pause */
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+/* Skill icons + tooltip */
+.skill-icon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.skill-icon:hover {
+  transform: scale(1.08);
+}
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(15, 23, 42, 0.9); /* slate-900 dark bg */
+  color: black;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 5;
+}
+
+.dark .tooltip {
+  background-color: rgba(226, 232, 240, 0.9); /* slate-200 */
+  color: black;
+}
+
+/* Scale with viewport width */
+.marquee-content i {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+}
+
 body {
   /* your existing styles */
   overflow-x: hidden; /* Prevent horizontal scrolling */
