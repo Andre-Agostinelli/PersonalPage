@@ -102,9 +102,12 @@ if (themeToggleBtn) {
     });
 }
 
+// On content DOM load (page refresh)
 document.addEventListener('DOMContentLoaded', async () => {
   document.body.style.overflow = 'hidden';
   setInitialTheme();
+  requestAnimationFrame(()=>requestAnimationFrame(initCircularMarquees));
+  window.addEventListener('resize',resizeMarquee); 
   
   const typewriterElement = document.getElementById('typewriter-text');
   const subtitleText = document.getElementById('subtitle-text');
@@ -161,6 +164,133 @@ links.forEach(link => {
         hoverTabClasses.forEach(cls => link.classList.remove(cls));
     });
 });
+
+// attach once during initialization
+function initializePageAndTabs() {
+  const initialPageId = 'home';
+  pages.forEach(p => { p.classList.add('hidden'); p.classList.remove('block'); });
+  const initialPage = document.getElementById(initialPageId);
+  if (initialPage) { initialPage.classList.remove('hidden'); initialPage.classList.add('block'); }
+
+  links.forEach(link => {
+    activeTabClasses.forEach(c => link.classList.remove(c));
+    hoverTabClasses.forEach(c => link.classList.remove(c));
+    if (link.dataset.page === initialPageId) activeTabClasses.forEach(c => link.classList.add(c));
+    else hoverTabClasses.forEach(c => link.classList.add(c));
+  });
+
+  // Global persistent background
+  if (!window.waveField) window.waveField = new WaveField();
+
+  // Scroll detection stays identical
+  const sections = document.querySelectorAll('.page');
+  const navLinks = document.querySelectorAll('nav a[data-page]');
+  function updateActiveNav(activeSection) {
+    navLinks.forEach(link => {
+      activeTabClasses.forEach(c => link.classList.remove(c));
+      link.classList.remove('bg-slate-400', 'text-white', 'dark:bg-slate-500');
+      hoverTabClasses.forEach(c => link.classList.add(c));
+      if (link.dataset.page === activeSection) {
+        hoverTabClasses.forEach(c => link.classList.remove(c));
+        link.classList.add('bg-slate-400', 'text-white', 'dark:bg-slate-500');
+      }
+    });
+  }
+  const observerOptions = { root: null, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) updateActiveNav(entry.target.dataset.nav);
+    });
+  }, observerOptions);
+  sections.forEach(section => observer.observe(section));
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(link.dataset.page);
+      if (target) {
+        // dynamically calculates header hieght and therefore respective scroll height necessary
+        const headerHeight = document.querySelector('nav').offsetHeight;
+        // target page top y + scrolled y pixels - header height = resulting top of section
+        const targetY = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      };
+    });
+  });
+
+  updateActiveNav('home');
+}
+
+/* ==============================
+   MARQUEE SYSTEM
+   ============================== */
+
+/* MARQUEE: true circular motion, continuous queue, alternating rows */
+
+const MARQUEE_SPEED = 100;   // base px/sec at 640px width
+const ICON_VISIBLE = 10;     // ~visible icons per row
+const FRAME_MS = 16;         // ~60fps
+
+/* --- helpers --- */
+function vw() { return Math.max(320, window.innerWidth); }
+function speedForWidth(w) { return MARQUEE_SPEED * Math.max(1, 640 / w); }
+function iconWidth(row) { return row.clientWidth / ICON_VISIBLE; }
+function initMarqueeRow(row, index) {
+  const dir = index % 2 === 0 ? -1 : 1; // alternate
+  const icons = Array.from(row.querySelectorAll('.skill-icon'));
+  if(!icons.length) return;
+  const w = row.clientWidth;
+  const iw = iconWidth(row);
+  const need = Math.ceil((ICON_VISIBLE + 1) / icons.length);
+  for(let i=1;i<need;i++) icons.forEach(c=>{
+    const clone=c.cloneNode(true);clone.dataset.marqueeClone='1';row.querySelector('.marquee-content').appendChild(clone);
+  });
+  const all = Array.from(row.querySelectorAll('.skill-icon'));
+  all.forEach((icon,i)=>{icon.style.position='absolute';icon.style.left=(i*iw)+'px';icon.style.width=iw+'px';});
+  const speed = speedForWidth(vw())*dir;
+  animateRow(row,all,iw,speed);
+}
+
+/* --- core animation --- */
+function animateRow(row,icons,iw,speed){
+  let lastTime=null;
+  function frame(t){
+    if(!lastTime) lastTime=t;
+    const dt=(t-lastTime)/1000;lastTime=t;
+    icons.forEach(icon=>{
+      let x=parseFloat(icon.style.left)||0;
+      x+=speed*dt;
+      if(speed<0 && x+iw<0) x+=icons.length*iw;
+      if(speed>0 && x>row.clientWidth) x-=icons.length*iw;
+      icon.style.left=x+'px';
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* --- setup all rows --- */
+function initCircularMarquees(){
+  document.querySelectorAll('.marquee-row').forEach((row,i)=>{
+    const content=row.querySelector('.marquee-content');
+    if(!content) return;
+    row.style.position='relative';
+    content.style.position='absolute';
+    content.style.inset='0';
+    initMarqueeRow(row,i);
+  });
+}
+
+/* --- responsive rebuild --- */
+let _rto=null;
+function resizeMarquee() {
+  clearTimeout(_rto);
+  _rto=setTimeout(initCircularMarquees,200);
+}
+
+/* --- start after DOM + splashHidden --- */
+// window.addEventListener('splashHidden',initCircularMarquees);
+
 
 // ---- Enhanced Global WaveField Background ---- //
 class WaveField {
@@ -241,44 +371,44 @@ class WaveField {
     this.setupWaves();
   }
 
-animate() {
-  this.draw();
-  requestAnimationFrame(() => this.animate());
-}
+  animate() {
+    this.draw();
+    requestAnimationFrame(() => this.animate());
+  }
 
-draw() {
-  const ctx = this.ctx;
-  ctx.clearRect(0, 0, this.width, this.height);
+  draw() {
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, this.width, this.height);
 
-  const ampReact = 1 + (this.mouse.y - 0.5) * 0.8;
-  const phaseReact = (this.mouse.x - 0.5) * Math.PI;
+    const ampReact = 1 + (this.mouse.y - 0.5) * 0.8;
+    const phaseReact = (this.mouse.x - 0.5) * Math.PI;
 
-  this.waves.forEach(wave => {
-    ctx.beginPath();
-    const bandTop = (wave.bandIndex + 0.5) * (this.height / this.bands);
+    this.waves.forEach(wave => {
+      ctx.beginPath();
+      const bandTop = (wave.bandIndex + 0.5) * (this.height / this.bands);
 
-    // constant drift left/right + mouse phase shift
-    wave.phaseOffset += wave.speed * wave.direction * 0.4;
+      // constant drift left/right + mouse phase shift
+      wave.phaseOffset += wave.speed * wave.direction * 0.4;
 
-    const phaseShift =
-      wave.phaseOffset + phaseReact * 1.5; // keep mouse effect strong
+      const phaseShift =
+        wave.phaseOffset + phaseReact * 1.5; // keep mouse effect strong
 
-    const fn = wave.isCos ? Math.cos : Math.sin;
-    for (let x = 0; x <= this.width; x++) {
-      const y =
-        bandTop +
-        fn((x / wave.wavelength) * 2 * Math.PI + phaseShift) *
-          wave.amplitude *
-          ampReact;
-      if (x === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
+      const fn = wave.isCos ? Math.cos : Math.sin;
+      for (let x = 0; x <= this.width; x++) {
+        const y =
+          bandTop +
+          fn((x / wave.wavelength) * 2 * Math.PI + phaseShift) *
+            wave.amplitude *
+            ampReact;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
 
-    ctx.strokeStyle = this.applyAlpha(wave.color, wave.alpha);
-    ctx.lineWidth = 2;
-    ctx.stroke();
-  });
-}
+      ctx.strokeStyle = this.applyAlpha(wave.color, wave.alpha);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+  }
 
   applyAlpha(hex, alpha) {
     const rgb = parseInt(hex.slice(1), 16);
@@ -289,59 +419,4 @@ draw() {
   }
 }
 
-// attach once during initialization
-function initializePageAndTabs() {
-  const initialPageId = 'home';
-  pages.forEach(p => { p.classList.add('hidden'); p.classList.remove('block'); });
-  const initialPage = document.getElementById(initialPageId);
-  if (initialPage) { initialPage.classList.remove('hidden'); initialPage.classList.add('block'); }
-
-  links.forEach(link => {
-    activeTabClasses.forEach(c => link.classList.remove(c));
-    hoverTabClasses.forEach(c => link.classList.remove(c));
-    if (link.dataset.page === initialPageId) activeTabClasses.forEach(c => link.classList.add(c));
-    else hoverTabClasses.forEach(c => link.classList.add(c));
-  });
-
-  // Global persistent background
-  if (!window.waveField) window.waveField = new WaveField();
-
-  // Scroll detection stays identical
-  const sections = document.querySelectorAll('.page');
-  const navLinks = document.querySelectorAll('nav a[data-page]');
-  function updateActiveNav(activeSection) {
-    navLinks.forEach(link => {
-      activeTabClasses.forEach(c => link.classList.remove(c));
-      link.classList.remove('bg-slate-400', 'text-white', 'dark:bg-slate-500');
-      hoverTabClasses.forEach(c => link.classList.add(c));
-      if (link.dataset.page === activeSection) {
-        hoverTabClasses.forEach(c => link.classList.remove(c));
-        link.classList.add('bg-slate-400', 'text-white', 'dark:bg-slate-500');
-      }
-    });
-  }
-  const observerOptions = { root: null, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) updateActiveNav(entry.target.dataset.nav);
-    });
-  }, observerOptions);
-  sections.forEach(section => observer.observe(section));
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const target = document.getElementById(link.dataset.page);
-      if (target) {
-        // dynamically calculates header hieght and therefore respective scroll height necessary
-        const headerHeight = document.querySelector('nav').offsetHeight;
-        // target page top y + scrolled y pixels - header height = resulting top of section
-        const targetY = target.getBoundingClientRect().top + window.scrollY - headerHeight;
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      };
-    });
-  });
-
-  updateActiveNav('home');
-}
 
