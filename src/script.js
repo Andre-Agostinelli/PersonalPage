@@ -227,7 +227,7 @@ function initializePageAndTabs() {
 
 /* MARQUEE: true circular motion, continuous queue, alternating rows */
 
-const MARQUEE_SPEED = 100;   // base px/sec at 640px width
+const MARQUEE_SPEED = 20;   // base px/sec at 640px width
 const ICON_VISIBLE = 10;     // ~visible icons per row
 const FRAME_MS = 16;         // ~60fps
 
