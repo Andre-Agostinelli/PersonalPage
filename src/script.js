@@ -1,298 +1,223 @@
-// Navigation tabs switching
-const links = document.querySelectorAll('nav a[data-page]');
-const pages = document.querySelectorAll('main section.page');
+/* ===================
+   THEME MANAGER
+   =================== */
 
-const activeTabClasses = [
-    'active-tab',
-    'bg-slate-500',        
-    'text-white',           
-    'dark:bg-slate-200',    
-    'dark:text-black'       
-];
+const ThemeManager = {
+  toggleBtn: document.getElementById('theme-toggle'),
 
-const hoverTabClasses = [
-    'hover:bg-slate-400',
-    'dark:hover:bg-slate-200',
-    'hover:text-white',
-    'dark:hover:text-black',
-];
-
-// Typewriter effect for splash screen
-function typewriterEffect(element, text, speed = 100) {
-  return new Promise((resolve) => {
-    let i = 0;
-    element.classList.add('typewriter-cursor');
-    
-    function type() {
-      if (i < text.length) {
-        element.textContent += text.charAt(i);
-        i++;
-        setTimeout(type, speed);
-      } else {
-        // Remove cursor and resolve promise when done
-        element.classList.remove('typewriter-cursor');
-        resolve();
-      }
+  apply(theme) {
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      if (this.toggleBtn) this.toggleBtn.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      if (this.toggleBtn) this.toggleBtn.textContent = '🌙';
     }
+  },
+
+  initialize() {
+    const stored = localStorage.getItem('theme');
+    const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    this.apply(theme);
     
-    type();
-  });
-}
+    if (this.toggleBtn) {
+      this.toggleBtn.addEventListener('click', () => {
+        const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+        this.apply(newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+    }
+  }
+};
 
-function hideSplashScreen() {
-  const splashScreen = document.getElementById('splash-screen');
-  initializePageAndTabs();
+/* ===================
+   SPLASH SCREEN
+   =================== */
 
-  if (splashScreen) {
-    splashScreen.style.opacity = '0';
-    splashScreen.style.transition = 'opacity 0.7s ease-out';
+const SplashScreen = {
+  async typewriter(element, text, speed = 100) {
+    return new Promise((resolve) => {
+      let i = 0;
+      element.classList.add('typewriter-cursor');
+      
+      function type() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        } else {
+          element.classList.remove('typewriter-cursor');
+          resolve();
+        }
+      }
+      type();
+    });
+  },
+
+  fadeInElements(elements) {
+    requestAnimationFrame(() => {
+      elements.forEach(el => {
+        if (el) {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }
+      });
+    });
+  },
+
+  hide() {
+    const splash = document.getElementById('splash-screen');
+    if (!splash) return;
+
+    splash.style.opacity = '0';
+    splash.style.transition = 'opacity 0.7s ease-out';
     
     setTimeout(() => {
-      splashScreen.remove();
+      splash.remove();
       document.body.style.overflow = '';
+      NavigationManager.initialize();
+      MarqueeSystem.initialize();
     }, 700);
-  }
-}
+  },
 
-// Theme toggle button logic
-const themeToggleBtn = document.getElementById('theme-toggle');
-
-// Function to apply a theme
-function applyTheme(theme) {
-    if (theme === 'dark') {
-        document.body.classList.add('dark');
-        if (themeToggleBtn) {
-            themeToggleBtn.textContent = '☀️'; // Sun icon for dark mode
-        }
-    } else {
-        document.body.classList.remove('dark');
-        if (themeToggleBtn) {
-            themeToggleBtn.textContent = '🌙'; // Moon icon for light mode
-        }
-    }
-}
-
-// Function to set the initial theme based on localStorage or system preference
-function setInitialTheme() {
-    // 1. Check localStorage first for explicit user preference
-    const storedTheme = localStorage.getItem('theme');
-
-    if (storedTheme) {
-        applyTheme(storedTheme);
-    } else {
-        // 2. If no stored preference, check system preference
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            applyTheme('dark');
-        } else {
-            applyTheme('light');
-        }
-    }
-}
-
-// Event listener for theme toggle button
-if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-        if (document.body.classList.contains('dark')) {
-            applyTheme('light');
-            localStorage.setItem('theme', 'light'); // Save preference
-        } else {
-            applyTheme('dark');
-            localStorage.setItem('theme', 'dark'); // Save preference
-        }
-    });
-}
-
-// On content DOM load (page refresh)
-document.addEventListener('DOMContentLoaded', async () => {
-  document.body.style.overflow = 'hidden';
-  setInitialTheme();
-  requestAnimationFrame(()=>requestAnimationFrame(initCircularMarquees));
-  window.addEventListener('resize',resizeMarquee); 
-  
-  const typewriterElement = document.getElementById('typewriter-text');
-  const subtitleText = document.getElementById('subtitle-text');
-  const clickText = document.getElementById('click-text');
-  const splashScreen = document.getElementById('splash-screen');
-  
-  if (typewriterElement && splashScreen) {
-    // 1. Type the name (subtitle is invisible during this)
-    await typewriterEffect(typewriterElement, "Hi, I'm Andre", 150);
-
-  // ------------------ ROBUST INLINE FADE (replace existing subtitle/click code) ------------------
-    // Use rAF so the browser registers the starting values, then flip to animated values
-    requestAnimationFrame(() => {
-      if (subtitleText) {
-        subtitleText.style.opacity = '1';
-        subtitleText.style.transform = 'translateY(0)';
-      }
-      if (clickText) {
-        clickText.style.opacity = '1';
-        clickText.style.transform = 'translateY(0)';
-        // add the flashing effect after fade-in completes
-        setTimeout(() => {
-          clickText.classList.add('flash');
-        }, 800); // wait for the fade duration (~0.7s) before flashing
-      }
-    });
+  async initialize() {
+    document.body.style.overflow = 'hidden';
     
-    splashScreen.addEventListener('click', () => {
-      //clearTimeout(autoHideTimeout);
-      hideSplashScreen();
-    }, { once: true });
+    const typewriterEl = document.getElementById('typewriter-text');
+    const subtitle = document.getElementById('subtitle-text');
+    const clickText = document.getElementById('click-text');
+    const splash = document.getElementById('splash-screen');
+    
+    if (!typewriterEl || !splash) return;
+
+    await this.typewriter(typewriterEl, "Hi, I'm Andre", 150);
+    this.fadeInElements([subtitle, clickText]);
+    
+    setTimeout(() => {
+      if (clickText) clickText.classList.add('flash');
+    }, 800);
+    
+    splash.addEventListener('click', () => this.hide(), { once: true });
   }
-});
+};
 
-// Add click listeners to navigation links (existing logic)
-links.forEach(link => {
-    link.addEventListener('click', e => {
-        e.preventDefault();
-        const pageId = link.getAttribute('data-page');
+/* ===================
+   NAVIGATION MANAGER
+   =================== */
 
-        pages.forEach(page => {
-            page.classList.add('hidden');
-            page.classList.remove('block');
-        });
-        document.getElementById(pageId).classList.remove('hidden');
-        document.getElementById(pageId).classList.add('block');
+const NavigationManager = {
+  links: document.querySelectorAll('nav a[data-page]'),
+  sections: document.querySelectorAll('main section.page'),
+  
+  activeClasses: ['active-tab', 'bg-slate-500', 'text-white', 'dark:bg-slate-200', 'dark:text-black'],
+  hoverClasses: ['hover:bg-slate-400', 'dark:hover:bg-slate-200', 'hover:text-white', 'dark:hover:text-black'],
 
-        links.forEach(l => {
-            activeTabClasses.forEach(cls => l.classList.remove(cls));
-            hoverTabClasses.forEach(cls => l.classList.add(cls));
-        });
-
-        activeTabClasses.forEach(cls => link.classList.add(cls));
-        hoverTabClasses.forEach(cls => link.classList.remove(cls));
-    });
-});
-
-// attach once during initialization
-function initializePageAndTabs() {
-  const initialPageId = 'home';
-  pages.forEach(p => { p.classList.add('hidden'); p.classList.remove('block'); });
-  const initialPage = document.getElementById(initialPageId);
-  if (initialPage) { initialPage.classList.remove('hidden'); initialPage.classList.add('block'); }
-
-  links.forEach(link => {
-    activeTabClasses.forEach(c => link.classList.remove(c));
-    hoverTabClasses.forEach(c => link.classList.remove(c));
-    if (link.dataset.page === initialPageId) activeTabClasses.forEach(c => link.classList.add(c));
-    else hoverTabClasses.forEach(c => link.classList.add(c));
-  });
-
-  // Global persistent background
-  if (!window.waveField) window.waveField = new WaveField();
-
-  // Scroll detection stays identical
-  const sections = document.querySelectorAll('.page');
-  const navLinks = document.querySelectorAll('nav a[data-page]');
-  function updateActiveNav(activeSection) {
-    navLinks.forEach(link => {
-      activeTabClasses.forEach(c => link.classList.remove(c));
+  updateActiveLink(activeId) {
+    this.links.forEach(link => {
+      this.activeClasses.forEach(cls => link.classList.remove(cls));
       link.classList.remove('bg-slate-400', 'text-white', 'dark:bg-slate-500');
-      hoverTabClasses.forEach(c => link.classList.add(c));
-      if (link.dataset.page === activeSection) {
-        hoverTabClasses.forEach(c => link.classList.remove(c));
+      this.hoverClasses.forEach(cls => link.classList.add(cls));
+      
+      if (link.dataset.page === activeId) {
+        this.hoverClasses.forEach(cls => link.classList.remove(cls));
         link.classList.add('bg-slate-400', 'text-white', 'dark:bg-slate-500');
       }
     });
-  }
-  const observerOptions = { root: null, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) updateActiveNav(entry.target.dataset.nav);
-    });
-  }, observerOptions);
-  sections.forEach(section => observer.observe(section));
+  },
 
-  navLinks.forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const target = document.getElementById(link.dataset.page);
-      if (target) {
-        // dynamically calculates header hieght and therefore respective scroll height necessary
+  setupScrollObserver() {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.updateActiveLink(entry.target.dataset.nav);
+        }
+      });
+    }, observerOptions);
+
+    this.sections.forEach(section => observer.observe(section));
+  },
+
+  setupClickHandlers() {
+    this.links.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.getElementById(link.dataset.page);
+        if (!target) return;
+
         const headerHeight = document.querySelector('nav').offsetHeight;
-        // target page top y + scrolled y pixels - header height = resulting top of section
         const targetY = target.getBoundingClientRect().top + window.scrollY - headerHeight;
         window.scrollTo({ top: targetY, behavior: 'smooth' });
-      };
+      });
     });
-  });
+  },
 
-  updateActiveNav('home');
-}
-
-/* ==============================
-   MARQUEE SYSTEM
-   ============================== */
-
-/* MARQUEE: true circular motion, continuous queue, alternating rows */
-
-const MARQUEE_SPEED = 20;   // base px/sec at 640px width
-const ICON_VISIBLE = 10;     // ~visible icons per row
-const FRAME_MS = 16;         // ~60fps
-
-/* --- helpers --- */
-function vw() { return Math.max(320, window.innerWidth); }
-function speedForWidth(w) { return MARQUEE_SPEED * Math.max(1, 640 / w); }
-function iconWidth(row) { return row.clientWidth / ICON_VISIBLE; }
-function initMarqueeRow(row, index) {
-  const dir = index % 2 === 0 ? -1 : 1; // alternate
-  const icons = Array.from(row.querySelectorAll('.skill-icon'));
-  if(!icons.length) return;
-  const w = row.clientWidth;
-  const iw = iconWidth(row);
-  const need = Math.ceil((ICON_VISIBLE + 1) / icons.length);
-  for(let i=1;i<need;i++) icons.forEach(c=>{
-    const clone=c.cloneNode(true);clone.dataset.marqueeClone='1';row.querySelector('.marquee-content').appendChild(clone);
-  });
-  const all = Array.from(row.querySelectorAll('.skill-icon'));
-  all.forEach((icon,i)=>{icon.style.position='absolute';icon.style.left=(i*iw)+'px';icon.style.width=iw+'px';});
-  const speed = speedForWidth(vw())*dir;
-  animateRow(row,all,iw,speed);
-}
-
-/* --- core animation --- */
-function animateRow(row,icons,iw,speed){
-  let lastTime=null;
-  function frame(t){
-    if(!lastTime) lastTime=t;
-    const dt=(t-lastTime)/1000;lastTime=t;
-    icons.forEach(icon=>{
-      let x=parseFloat(icon.style.left)||0;
-      x+=speed*dt;
-      if(speed<0 && x+iw<0) x+=icons.length*iw;
-      if(speed>0 && x>row.clientWidth) x-=icons.length*iw;
-      icon.style.left=x+'px';
-    });
-    requestAnimationFrame(frame);
+  initialize() {
+    this.setupScrollObserver();
+    this.setupClickHandlers();
+    this.updateActiveLink('home');
+    
+    if (!window.waveField) {
+      window.waveField = new WaveField();
+    }
   }
-  requestAnimationFrame(frame);
-}
+};
 
-/* --- setup all rows --- */
-function initCircularMarquees(){
-  document.querySelectorAll('.marquee-row').forEach((row,i)=>{
-    const content=row.querySelector('.marquee-content');
-    if(!content) return;
-    row.style.position='relative';
-    content.style.position='absolute';
-    content.style.inset='0';
-    initMarqueeRow(row,i);
-  });
-}
+/* ===================
+   MARQUEE SYSTEM
+   =================== */
 
-/* --- responsive rebuild --- */
-let _rto=null;
-function resizeMarquee() {
-  clearTimeout(_rto);
-  _rto=setTimeout(initCircularMarquees,200);
-}
+const MarqueeSystem = {
+  initialize() {
+    document.querySelectorAll('.marquee-row').forEach(row => {
+      const content = row.querySelector('.marquee-content');
+      if (!content) return;
+      
+      // Get all original icons
+      const icons = Array.from(content.children);
+      if (icons.length === 0) return;
+      
+      // Calculate how many icons we need to fill the screen plus buffer
+      const iconWidth = 100; // min-width from CSS
+      const gap = 32; // 2rem = 32px
+      const iconTotalWidth = iconWidth + gap;
+      const viewportWidth = window.innerWidth;
+      
+      // We need enough duplicates so that we have 2x the viewport width worth of icons
+      // This ensures when one set scrolls off, the duplicate is already in position
+      const iconsNeeded = Math.ceil((viewportWidth * 2) / iconTotalWidth);
+      const duplications = Math.ceil(iconsNeeded / icons.length);
+      
+      // Duplicate the entire set enough times
+      for (let i = 0; i < duplications; i++) {
+        icons.forEach(icon => {
+          const clone = icon.cloneNode(true);
+          content.appendChild(clone);
+        });
+      }
+      
+      // Calculate animation duration based on content width for consistent speed
+      const totalIcons = content.children.length;
+      const contentWidth = totalIcons * iconTotalWidth;
+      
+      // Speed: pixels per second (adjust this value to change speed)
+      const speed = 50; // pixels per second
+      const duration = (contentWidth / 2) / speed; // Divide by 2 because we animate 50% of content
+      
+      content.style.animationDuration = `${duration}s`;
+    });
+  }
+};
 
-/* --- start after DOM + splashHidden --- */
-// window.addEventListener('splashHidden',initCircularMarquees);
+/* ===================
+   WAVE FIELD
+   =================== */
 
-
-// ---- Enhanced Global WaveField Background ---- //
 class WaveField {
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -306,13 +231,17 @@ class WaveField {
       width: '100%',
       height: '100%',
       zIndex: '-1',
-      pointerEvents: 'none',
+      pointerEvents: 'none'
     });
 
     this.mouse = { x: 0.5, y: 0.5 };
-    this.phase = 0;
-    this.bands = 3; // number of stacked wave bands
-    this.wavesPerBand = 3;
+    this.waves = [];
+    this.config = {
+      bands: 3,
+      wavesPerBand: 3,
+      resizeDebounce: 150
+    };
+
     this.resize();
     this.setupWaves();
     this.bindEvents();
@@ -326,19 +255,20 @@ class WaveField {
       : ['#22c55e', '#16a34a', '#4ade80'];
 
     this.waves = [];
-    const bandHeight = this.height / this.bands;
-    for (let b = 0; b < this.bands; b++) {
-      for (let i = 0; i < this.wavesPerBand; i++) {
+    const bandHeight = this.height / this.config.bands;
+
+    for (let b = 0; b < this.config.bands; b++) {
+      for (let i = 0; i < this.config.wavesPerBand; i++) {
         this.waves.push({
           bandIndex: b,
-          amplitude: bandHeight / (3 + i), // stronger amplitude than before
+          amplitude: bandHeight / (3 + i),
           wavelength: 200 + i * 60,
           speed: 0.015 + i * 0.006,
-          direction: (b + i) % 2 === 0 ? 1 : -1, // alternate direction
+          direction: (b + i) % 2 === 0 ? 1 : -1,
           color: baseColors[(b + i) % baseColors.length],
           alpha: 0.22 - i * 0.03,
           phaseOffset: Math.random() * Math.PI * 2,
-          isCos: (b + i) % 2 === 0, // alternate sine/cos
+          isCos: (b + i) % 2 === 0
         });
       }
     }
@@ -346,23 +276,29 @@ class WaveField {
 
   bindEvents() {
     window.addEventListener('resize', this.debouncedResize.bind(this));
+    
     document.addEventListener('mousemove', e => {
       this.mouse.x = e.clientX / window.innerWidth;
       this.mouse.y = e.clientY / window.innerHeight;
     });
+
     document.addEventListener('touchmove', e => {
       if (e.touches[0]) {
         this.mouse.x = e.touches[0].clientX / window.innerWidth;
         this.mouse.y = e.touches[0].clientY / window.innerHeight;
       }
     });
+
     const observer = new MutationObserver(() => this.setupWaves());
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
   }
 
   debouncedResize() {
     clearTimeout(this._resizeTimeout);
-    this._resizeTimeout = setTimeout(() => this.resize(), 150);
+    this._resizeTimeout = setTimeout(() => this.resize(), this.config.resizeDebounce);
   }
 
   resize() {
@@ -377,40 +313,31 @@ class WaveField {
   }
 
   draw() {
-    const ctx = this.ctx;
-    ctx.clearRect(0, 0, this.width, this.height);
+    this.ctx.clearRect(0, 0, this.width, this.height);
 
     const ampReact = 1 + (this.mouse.y - 0.5) * 0.8;
     const phaseReact = (this.mouse.x - 0.5) * Math.PI;
 
     this.waves.forEach(wave => {
-      ctx.beginPath();
-      const bandTop = (wave.bandIndex + 0.5) * (this.height / this.bands);
-
-      // constant drift left/right + mouse phase shift
+      this.ctx.beginPath();
+      const bandTop = (wave.bandIndex + 0.5) * (this.height / this.config.bands);
       wave.phaseOffset += wave.speed * wave.direction * 0.4;
-
-      const phaseShift =
-        wave.phaseOffset + phaseReact * 1.5; // keep mouse effect strong
-
+      const phaseShift = wave.phaseOffset + phaseReact * 1.5;
       const fn = wave.isCos ? Math.cos : Math.sin;
+
       for (let x = 0; x <= this.width; x++) {
-        const y =
-          bandTop +
-          fn((x / wave.wavelength) * 2 * Math.PI + phaseShift) *
-            wave.amplitude *
-            ampReact;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        const y = bandTop + fn((x / wave.wavelength) * 2 * Math.PI + phaseShift) * wave.amplitude * ampReact;
+        if (x === 0) this.ctx.moveTo(x, y);
+        else this.ctx.lineTo(x, y);
       }
 
-      ctx.strokeStyle = this.applyAlpha(wave.color, wave.alpha);
-      ctx.lineWidth = 2;
-      ctx.stroke();
+      this.ctx.strokeStyle = this.hexToRgba(wave.color, wave.alpha);
+      this.ctx.lineWidth = 2;
+      this.ctx.stroke();
     });
   }
 
-  applyAlpha(hex, alpha) {
+  hexToRgba(hex, alpha) {
     const rgb = parseInt(hex.slice(1), 16);
     const r = (rgb >> 16) & 255;
     const g = (rgb >> 8) & 255;
@@ -419,4 +346,11 @@ class WaveField {
   }
 }
 
+/* ===================
+   INITIALIZATION
+   =================== */
 
+document.addEventListener('DOMContentLoaded', async () => {
+  ThemeManager.initialize();
+  await SplashScreen.initialize();
+});

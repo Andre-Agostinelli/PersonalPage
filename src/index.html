@@ -88,7 +88,7 @@
             I’m a software engineer passionate about building systems that bridge 
             <span class="font-bold text-emerald-700 dark:text-emerald-300">hardware</span> and
             <span class="font-bold text-emerald-700 dark:text-emerald-300">software.</span>
-            Welcome to my portfolio where I share my projects, thoughts, experience, and really anything!
+            Welcome to my portfolio where I share my projects, experience, and general thoughts!
           </p>
         </div>
         <!-- Right: profile image -->
@@ -98,61 +98,87 @@
               class="rounded-2xl sm:w-64 md:w-80 lg:w-96 transform transition-all duration-700 ease-out scale-95 hover:scale-110 hover:shadow-2xl hover:shadow-emerald-600" />
         </div>
       </div>
-  </section>
+    </section>
+    <!-- Replace your skills section in the About page with this -->
+
     <section id="about" class="page p-8 hidden min-h-screen" data-nav="about">
       <h1 class="text-3xl font-bold mb-4">About Me</h1>
-      <p>Skills include: ...</p>
+      <p class="mb-8">Skills include:</p>
+      
       <!-- Animated Skills Showcase -->
-      <div class="space-y-8 overflow-hidden relative">
-        <!-- Row 1 -->
-        <div class="marquee-row overflow-hidden py-2">
+      <div class="space-y-8">
+        <!-- Row 1: Scrolls Left -->
+        <div class="marquee-row">
           <div class="marquee-content">
             <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
-              <i class="devicon-c-original colored"></i>
-              <div class="tooltip">C</div>
+              <i class="devicon-c-plain colored"></i>
+              <span class="tooltip">C</span>
             </div>
             <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
-              <i class="devicon-cplusplus-plain"></i>
-              <span class="tooltip group-hover:opacity-100">C++</span>
+              <i class="devicon-cplusplus-plain colored"></i>
+              <span class="tooltip">C++</span>
             </div>
             <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
-              <i class="devicon-csharp-line colored"></i>
-              <span class="tooltip group-hover:opacity-100">C#</span>
+              <i class="devicon-csharp-plain colored"></i>
+              <span class="tooltip">C#</span>
             </div>
             <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
-              <i class="devicon-java-plain-wordmark colored"></i>
-              <span class="tooltip group-hover:opacity-100">Java</span>
+              <i class="devicon-java-plain colored"></i>
+              <span class="tooltip">Java</span>
             </div>
             <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
-              <i class="devicon-python-plain-wordmark colored"></i>
-              <span class="tooltip group-hover:opacity-100">Python</span>
+              <i class="devicon-python-plain colored"></i>
+              <span class="tooltip">Python</span>
             </div>
             <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
-              <i class="devicon-mysql-plain-wordmark colored"></i>
-              <span class="tooltip group-hover:opacity-100">MySQL</span>
+              <i class="devicon-javascript-plain colored"></i>
+              <span class="tooltip">JavaScript</span>
             </div>
             <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
-              <i class="devicon-racket-plain colored"></i>
-              <span class="tooltip group-hover:opacity-100">Racket</span>
+              <i class="devicon-typescript-plain colored"></i>
+              <span class="tooltip">TypeScript</span>
             </div>
             <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
-              <i class="devicon-matlab-plain colored"></i>
-              <span class="tooltip group-hover:opacity-100">Matlab</span>
+              <i class="devicon-mysql-plain colored"></i>
+              <span class="tooltip">MySQL</span>
             </div>
-            <!-- repeat as needed -->
           </div>
         </div>
 
-        <!-- Row 2 (reverse) -->
-        <div class="w-full overflow-hidden">
-          <div class="flex gap-6 w-max animate-marquee-reverse">
-            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
-                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
-              <i class="devicon-linux-plain"></i> <span>Linux</span>
+        <!-- Row 2: Scrolls Right -->
+        <div class="marquee-row">
+          <div class="marquee-content">
+            <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
+              <i class="devicon-react-original colored"></i>
+              <span class="tooltip">React</span>
             </div>
-            <div class="flex items-center px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 
-                        text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105 hover:font-bold">
-              <i class="devicon-git-plain"></i> <span>Git</span>
+            <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
+              <i class="devicon-nodejs-plain colored"></i>
+              <span class="tooltip">Node.js</span>
+            </div>
+            <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
+              <i class="devicon-linux-plain colored"></i>
+              <span class="tooltip">Linux</span>
+            </div>
+            <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
+              <i class="devicon-git-plain colored"></i>
+              <span class="tooltip">Git</span>
+            </div>
+            <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
+              <i class="devicon-docker-plain colored"></i>
+              <span class="tooltip">Docker</span>
+            </div>
+            <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
+              <i class="devicon-matlab-plain colored"></i>
+              <span class="tooltip">MATLAB</span>
+            </div>
+            <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
+              <i class="devicon-racket-plain colored"></i>
+              <span class="tooltip">Racket</span>
+            </div>
+            <div class="skill-icon group px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800">
+              <i class="devicon-tailwindcss-plain colored"></i>
+              <span class="tooltip">Tailwind CSS</span>
             </div>
           </div>
         </div>
@@ -160,16 +186,26 @@
 
       <!-- Static skills grid for accessibility -->
       <div class="mt-10">
-        <h2 class="text-xl font-bold mb-3">Skills (static reference)</h2>
+        <h2 class="text-xl font-bold mb-3">All Skills</h2>
         <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-sm">
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">C</li>
           <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">C++</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">C#</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">Java</li>
           <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">Python</li>
           <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">JavaScript</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">TypeScript</li>
           <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">React</li>
-          <!-- continue -->
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">Node.js</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">MySQL</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">Git</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">Linux</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">Docker</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">MATLAB</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">Racket</li>
+          <li class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-center hover:font-bold">Tailwind CSS</li>
         </ul>
       </div>
-
     </section>
 
     <section id="projects" class="page p-8 hidden min-h-screen" data-nav="projects">
@@ -235,9 +271,9 @@
           </div>
         </div>
       </div>
-  </section>
+    </section>
 
-  <section id="blog" class="page p-8 hidden min-h-screen" data-nav="blog">
+    <section id="blog" class="page p-8 hidden min-h-screen" data-nav="blog">
       <h1 class="text-3xl font-bold mb-4">My Personal Blog/Thoughts</h1>
       <p class="mb-4">Welcome to a more personal side of my online presence. Here I'll share thoughts, experiences, and perhaps some behind-the-scenes insights not typically found in a professional portfolio.</p>
       <div class="prose dark:prose-invert max-w-none">
