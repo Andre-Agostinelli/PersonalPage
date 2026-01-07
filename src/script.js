@@ -169,6 +169,336 @@ const NavigationManager = {
 };
 
 /* ===================
+   TIMELINE SYSTEM
+   =================== */
+// Timeline configuration
+const timelineEvents = [
+  {
+    date: '1995',
+    title: 'Born',
+    description: 'Started my journey in the world',
+    phase: 0
+  },
+  {
+    date: '2000',
+    title: 'First Computer',
+    description: 'Got my first computer and fell in love with technology',
+    phase: 0
+  },
+  {
+    date: '2008',
+    title: 'Started Coding',
+    description: 'Wrote my first "Hello World" program',
+    phase: 1
+  },
+  {
+    date: '2013',
+    title: 'High School',
+    description: 'Began competitive programming',
+    phase: 1
+  },
+  {
+    date: '2017',
+    title: 'College',
+    description: 'Started Computer Science degree',
+    phase: 2
+  },
+  {
+    date: '2019',
+    title: 'First Internship',
+    description: 'Software engineering intern at tech company',
+    phase: 2
+  },
+  {
+    date: '2021',
+    title: 'Graduated',
+    description: 'BS in Computer Science',
+    phase: 3
+  },
+  {
+    date: '2022',
+    title: 'First Job',
+    description: 'Software Engineer at startup',
+    phase: 3
+  },
+  {
+    date: '2024',
+    title: 'Senior Engineer',
+    description: 'Promoted to senior position',
+    phase: 4
+  },
+  {
+    date: '2025',
+    title: 'Present',
+    description: 'Building amazing things',
+    phase: 4
+  }
+];
+
+// Phase colors
+const phaseColors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
+
+class Timeline {
+  constructor(events) {
+    this.events = events;
+    this.svg = document.querySelector('.timeline-svg');
+    this.segmentsGroup = document.querySelector('.timeline-segments');
+    this.eventsGroup = document.querySelector('.timeline-events');
+    this.tooltipsContainer = document.querySelector('.timeline-tooltips');
+    this.width = 1400;
+    this.height = 400;
+    this.rowHeight = 120;
+    this.pointsPerRow = 4;
+    this.margin = 100; // More margin for wider use of page
+    
+    this.init();
+  }
+  
+  init() {
+    this.calculatePoints();
+    this.renderSegments();
+    this.renderEvents();
+    this.adjustSVGHeight();
+  }
+  
+  calculatePoints() {
+    const points = [];
+    const rows = Math.ceil(this.events.length / this.pointsPerRow);
+    const availableWidth = this.width - (2 * this.margin);
+    const spacing = availableWidth / (this.pointsPerRow - 1);
+    
+    this.events.forEach((event, i) => {
+      const row = Math.floor(i / this.pointsPerRow);
+      const colInRow = i % this.pointsPerRow;
+      
+      // Alternate direction each row
+      const isReverse = row % 2 === 1;
+      const col = isReverse ? (this.pointsPerRow - 1 - colInRow) : colInRow;
+      
+      const x = this.margin + (spacing * col);
+      const y = row * this.rowHeight + 80;
+      
+      points.push({ x, y, event, index: i });
+    });
+    
+    this.points = points;
+  }
+  
+  renderSegments() {
+    this.segmentsGroup.innerHTML = '';
+    
+    for (let i = 0; i < this.points.length - 1; i++) {
+      const start = this.points[i];
+      const end = this.points[i + 1];
+      
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      
+      // Create smooth curved path
+      const startRow = Math.floor(i / this.pointsPerRow);
+      const endRow = Math.floor((i + 1) / this.pointsPerRow);
+      
+      let pathData;
+      if (startRow !== endRow) {
+        // Row transition - smooth S curve
+        const midY = (start.y + end.y) / 2;
+        const controlOffset = 80;
+        pathData = `M ${start.x} ${start.y} 
+                    C ${start.x} ${start.y + controlOffset}, 
+                      ${end.x} ${end.y - controlOffset}, 
+                      ${end.x} ${end.y}`;
+      } else {
+        // Same row - gentle curve
+        const controlOffset = 30;
+        const midX = (start.x + end.x) / 2;
+        pathData = `M ${start.x} ${start.y} 
+                    Q ${midX} ${start.y - controlOffset}, 
+                      ${end.x} ${end.y}`;
+      }
+      
+      path.setAttribute('d', pathData);
+      path.setAttribute('stroke-width', 4);
+      path.setAttribute('fill', 'none');
+      
+      // Color based on phase transition
+      const startPhase = start.event.phase;
+      const endPhase = end.event.phase;
+      
+      if (startPhase === endPhase) {
+        // Same phase - solid color
+        path.setAttribute('stroke', phaseColors[startPhase]);
+      } else {
+        // Phase transition - gradient
+        const gradientId = `gradient-${i}`;
+        const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        gradient.setAttribute('id', gradientId);
+        gradient.setAttribute('gradientUnits', 'userSpaceOnUse');
+        gradient.setAttribute('x1', start.x);
+        gradient.setAttribute('y1', start.y);
+        gradient.setAttribute('x2', end.x);
+        gradient.setAttribute('y2', end.y);
+        
+        const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop1.setAttribute('offset', '0%');
+        stop1.setAttribute('style', `stop-color:${phaseColors[startPhase]};stop-opacity:1`);
+        
+        const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop2.setAttribute('offset', '100%');
+        stop2.setAttribute('style', `stop-color:${phaseColors[endPhase]};stop-opacity:1`);
+        
+        gradient.appendChild(stop1);
+        gradient.appendChild(stop2);
+        
+        const defs = this.svg.querySelector('defs') || this.svg.insertBefore(
+          document.createElementNS('http://www.w3.org/2000/svg', 'defs'),
+          this.svg.firstChild
+        );
+        defs.appendChild(gradient);
+        
+        path.setAttribute('stroke', `url(#${gradientId})`);
+      }
+      
+      this.segmentsGroup.appendChild(path);
+    }
+  }
+  
+  renderEvents() {
+    this.eventsGroup.innerHTML = '';
+    this.tooltipsContainer.innerHTML = '';
+    
+    this.points.forEach((point, i) => {
+      // Create circle
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', point.x);
+      circle.setAttribute('cy', point.y);
+      circle.setAttribute('r', 10);
+      circle.setAttribute('fill', 'white');
+      circle.setAttribute('stroke', phaseColors[point.event.phase]);
+      circle.setAttribute('stroke-width', 4);
+      circle.classList.add('timeline-point');
+      circle.dataset.index = i;
+      
+      this.eventsGroup.appendChild(circle);
+      
+      // Determine tooltip position
+      const row = Math.floor(i / this.pointsPerRow);
+      const colInRow = i % this.pointsPerRow;
+      
+      // Alternate above/below
+      const isAbove = i % 2 === 0;
+      
+      // Check if at edge (first or last in row)
+      const isLeftEdge = colInRow === 0;
+      const isRightEdge = colInRow === this.pointsPerRow - 1;
+      
+      // Create tooltip
+      const tooltip = document.createElement('div');
+      tooltip.classList.add('timeline-tooltip');
+      tooltip.dataset.index = i;
+      tooltip.innerHTML = `
+        <div class="font-bold text-lg mb-1">${point.event.title}</div>
+        <div class="text-sm opacity-75 mb-2">${point.event.date}</div>
+        ${point.event.description ? `<div class="text-sm">${point.event.description}</div>` : ''}
+      `;
+      
+      // Store position info
+      tooltip.dataset.position = isAbove ? 'above' : 'below';
+      tooltip.dataset.edge = isLeftEdge ? 'left' : isRightEdge ? 'right' : 'center';
+      
+      this.tooltipsContainer.appendChild(tooltip);
+      
+      // Create connector line
+      const connector = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      connector.classList.add('tooltip-connector');
+      connector.dataset.index = i;
+      connector.setAttribute('stroke', phaseColors[point.event.phase]);
+      connector.setAttribute('stroke-width', 2);
+      connector.style.opacity = '0';
+      this.eventsGroup.appendChild(connector);
+      
+      // Event listeners
+      circle.addEventListener('mouseenter', () => this.showTooltip(i, point));
+      circle.addEventListener('mouseleave', () => this.hideTooltip(i));
+    });
+  }
+  
+  showTooltip(index, point) {
+    const circle = this.eventsGroup.querySelector(`circle[data-index="${index}"]`);
+    const tooltip = this.tooltipsContainer.querySelector(`.timeline-tooltip[data-index="${index}"]`);
+    const connector = this.eventsGroup.querySelector(`.tooltip-connector[data-index="${index}"]`);
+    
+    circle.setAttribute('r', 14);
+    
+    // Get positions relative to the SVG container
+    const svgRect = this.svg.getBoundingClientRect();
+    const tooltipsRect = this.tooltipsContainer.getBoundingClientRect();
+    
+    const scaleX = svgRect.width / this.width;
+    const scaleY = svgRect.height / this.svg.viewBox.baseVal.height;
+    
+    // Calculate point position in screen coordinates
+    const pointScreenX = point.x * scaleX;
+    const pointScreenY = point.y * scaleY;
+    
+    // Get offset between SVG and tooltips container
+    const offsetX = svgRect.left - tooltipsRect.left;
+    const offsetY = svgRect.top - tooltipsRect.top;
+    
+    const position = tooltip.dataset.position;
+    const edge = tooltip.dataset.edge;
+    
+    // Position relative to tooltips container
+    let tooltipX = pointScreenX + offsetX;
+    let tooltipY = (position === 'above' ? pointScreenY - 100 : pointScreenY + 100) + offsetY;
+    
+    // Adjust for edges
+    if (edge === 'left') {
+      tooltipX = pointScreenX + 80 + offsetX;
+    } else if (edge === 'right') {
+      tooltipX = pointScreenX - 80 + offsetX;
+    }
+    
+    tooltip.style.left = `${tooltipX}px`;
+    tooltip.style.top = `${tooltipY}px`;
+    tooltip.classList.add('active');
+    
+    // Update connector line
+    const tooltipCenterX = tooltipX - offsetX;
+    const tooltipCenterY = (tooltipY - offsetY) + 40;
+    
+    connector.setAttribute('x1', point.x);
+    connector.setAttribute('y1', point.y);
+    connector.setAttribute('x2', tooltipCenterX / scaleX);
+    connector.setAttribute('y2', tooltipCenterY / scaleY);
+    connector.style.opacity = '0.6';
+  }
+  
+  hideTooltip(index) {
+    const circle = this.eventsGroup.querySelector(`circle[data-index="${index}"]`);
+    const tooltip = this.tooltipsContainer.querySelector(`.timeline-tooltip[data-index="${index}"]`);
+    const connector = this.eventsGroup.querySelector(`.tooltip-connector[data-index="${index}"]`);
+    
+    circle.setAttribute('r', 10);
+    tooltip.classList.remove('active');
+    connector.style.opacity = '0';
+  }
+  
+  adjustSVGHeight() {
+    const rows = Math.ceil(this.events.length / this.pointsPerRow);
+    const newHeight = rows * this.rowHeight + 160;
+    this.svg.setAttribute('viewBox', `0 0 ${this.width} ${newHeight}`);
+  }
+}
+
+// Initialize timeline
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    new Timeline(timelineEvents);
+  });
+} else {
+  new Timeline(timelineEvents);
+}
+
+/* ===================
    MARQUEE SYSTEM
    =================== */
 
