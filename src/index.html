@@ -220,10 +220,166 @@
         </ul>
       </div>
     </section>
-
+    <!-- Project Card Stack Page -->
     <section id="projects" class="page p-8 hidden min-h-screen" data-nav="projects">
-      <h1 class="text-3xl font-bold mb-4">Projects</h1>
-      <p>Here are some cool things I’ve built.</p>
+      <div class="max-w-5xl mx-auto">
+        <h1 class="text-4xl font-extrabold mb-4 text-center bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
+          My Projects
+        </h1>
+        <p class="text-center text-lg mb-8 text-slate-600 dark:text-slate-400">
+          Swipe through some cool things I've built
+        </p>
+        <!-- Card Stack Container -->
+        <div class="project-carousel">
+          <div class="project-stack" id="projectStack">
+            
+            <!-- Project Card 1 -->
+            <div class="project-card active" data-index="0">
+              <div class="project-image-container">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop" 
+                    alt="Smart Home Controller" 
+                    class="project-image" />
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">Smart Home Controller</h3>
+                <p class="project-description">
+                  A full-stack IoT application for controlling smart home devices with real-time monitoring and automation features. Built with modern web technologies and connected to multiple hardware platforms.
+                </p>
+                <div class="project-tags">
+                  <span class="tag">React</span>
+                  <span class="tag">Node.js</span>
+                  <span class="tag">IoT</span>
+                  <span class="tag">WebSocket</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Card 2 -->
+            <div class="project-card" data-index="1">
+              <div class="project-image-container">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop" 
+                    alt="Data Visualization Dashboard" 
+                    class="project-image" />
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">Data Visualization Dashboard</h3>
+                <p class="project-description">
+                  Interactive analytics platform with real-time data processing and customizable visualization components. Handles millions of data points with optimized rendering and smooth animations.
+                </p>
+                <div class="project-tags">
+                  <span class="tag">Python</span>
+                  <span class="tag">D3.js</span>
+                  <span class="tag">SQL</span>
+                  <span class="tag">Redis</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Card 3 -->
+            <div class="project-card" data-index="2">
+              <div class="project-image-container">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop" 
+                    alt="Machine Learning Pipeline" 
+                    class="project-image" />
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">Machine Learning Pipeline</h3>
+                <p class="project-description">
+                  Automated ML pipeline for training, deploying, and monitoring models with continuous integration. Includes automated feature engineering and hyperparameter optimization.
+                </p>
+                <div class="project-tags">
+                  <span class="tag">Python</span>
+                  <span class="tag">TensorFlow</span>
+                  <span class="tag">Docker</span>
+                  <span class="tag">Kubernetes</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Card 4 -->
+            <div class="project-card" data-index="3">
+              <div class="project-image-container">
+                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop" 
+                    alt="Mobile Fitness Tracker" 
+                    class="project-image" />
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">Mobile Fitness Tracker</h3>
+                <p class="project-description">
+                  Cross-platform mobile app for tracking workouts, nutrition, and health metrics with social features. Integrates with popular fitness devices and provides personalized insights.
+                </p>
+                <div class="project-tags">
+                  <span class="tag">React Native</span>
+                  <span class="tag">Firebase</span>
+                  <span class="tag">API</span>
+                  <span class="tag">HealthKit</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Card 5 -->
+            <div class="project-card" data-index="4">
+              <div class="project-image-container">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop" 
+                    alt="Robotics Control System" 
+                    class="project-image" />
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">Robotics Control System</h3>
+                <p class="project-description">
+                  Real-time control interface for autonomous robots with path planning and obstacle detection. Features SLAM algorithms and sensor fusion for precise navigation.
+                </p>
+                <div class="project-tags">
+                  <span class="tag">C++</span>
+                  <span class="tag">ROS</span>
+                  <span class="tag">Computer Vision</span>
+                  <span class="tag">OpenCV</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Card 6 -->
+            <div class="project-card" data-index="5">
+              <div class="project-image-container">
+                <img src="https://images.unsplash.com/photo-1484807352052-23338990c6c6?w=800&h=600&fit=crop" 
+                    alt="E-Commerce Platform" 
+                    class="project-image" />
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">E-Commerce Platform</h3>
+                <p class="project-description">
+                  Full-featured online marketplace with payment processing, inventory management, and analytics. Supports multiple vendors and includes admin dashboard with real-time metrics.
+                </p>
+                <div class="project-tags">
+                  <span class="tag">Next.js</span>
+                  <span class="tag">Stripe</span>
+                  <span class="tag">PostgreSQL</span>
+                  <span class="tag">AWS</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Navigation Controls -->
+          <div class="carousel-controls">
+            <button class="nav-btn prev-btn" id="prevBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            
+            <!-- Dot Indicators -->
+            <div class="carousel-dots" id="carouselDots"></div>
+            
+            <button class="nav-btn next-btn" id="nextBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="contact" class="page p-8 min-h-screen flex items-center justify-center" data-nav="contact">

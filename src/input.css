@@ -74,6 +74,7 @@ nav {
 /* ===================
    TIMELINE STYLING
    =================== */
+   
 .timeline-container {
   position: relative;
   min-height: 500px;
@@ -242,6 +243,239 @@ nav {
 .skill-icon:hover .tooltip {
   opacity: 1;
   transform: translateX(-50%) scale(1) translateY(-2px);
+}
+
+/* ===================
+   CARD STACK
+   =================== */
+
+/* Projects Carousel Styles */
+.project-carousel {
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.project-stack {
+  position: relative;
+  width: 100%;
+  height: 550px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-card {
+  position: absolute;
+  width: 100%;
+  max-width: 700px;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(248, 250, 252, 0.95) 100%);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateX(100%) scale(0.8);
+  pointer-events: none;
+  border: 2px solid transparent;
+}
+
+.dark .project-card {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.95) 0%, 
+    rgba(51, 65, 85, 0.95) 100%);
+}
+
+/* Active card (center) */
+.project-card.active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+  z-index: 3;
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #10b981, #3b82f6, #8b5cf6) 1;
+}
+
+/* Previous cards (left) */
+.project-card.prev {
+  opacity: 0.3;
+  transform: translateX(-120%) scale(0.85);
+  z-index: 1;
+}
+
+/* Next cards (right) */
+.project-card.next {
+  opacity: 0.3;
+  transform: translateX(120%) scale(0.85);
+  z-index: 1;
+}
+
+.project-image-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #10b981, #3b82f6);
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  background: linear-gradient(90deg, #10b981, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .project-title {
+  background: linear-gradient(90deg, #34d399, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.project-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.dark .project-description {
+  color: #cbd5e1;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.dark .tag {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Carousel Controls */
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.1);
+  border: 2px solid rgba(16, 185, 129, 0.3);
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark .nav-btn {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.nav-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  transform: scale(1.1);
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background: #10b981;
+  transform: scale(1.3);
+}
+
+.dark .carousel-dot {
+  background: rgba(16, 185, 129, 0.4);
+}
+
+.dark .carousel-dot.active {
+  background: #34d399;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .project-stack {
+    height: 600px;
+  }
+  
+  .project-card {
+    max-width: 90%;
+  }
+  
+  .project-image-container {
+    height: 220px;
+  }
+  
+  .project-content {
+    padding: 1.5rem;
+  }
+  
+  .carousel-controls {
+    gap: 1rem;
+  }
+  
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 /* ===================

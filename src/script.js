@@ -171,6 +171,7 @@ const NavigationManager = {
 /* ===================
    TIMELINE SYSTEM
    =================== */
+
 // Timeline configuration
 const timelineEvents = [
   {
@@ -496,6 +497,145 @@ if (document.readyState === 'loading') {
   });
 } else {
   new Timeline(timelineEvents);
+}
+
+/* ===================
+   CARDSTACK SYSTEM
+   =================== */
+
+   class ProjectCarousel {
+    constructor() {
+      this.stack = document.getElementById('projectStack');
+      this.cards = Array.from(document.querySelectorAll('.project-card'));
+      this.dotsContainer = document.getElementById('carouselDots');
+      this.prevBtn = document.getElementById('prevBtn');
+      this.nextBtn = document.getElementById('nextBtn');
+      this.currentIndex = 0;
+      
+      this.touchStartX = 0;
+      this.touchEndX = 0;
+      this.isDragging = false;
+      
+      this.init();
+    }
+    
+    init() {
+      this.createDots();
+      this.addEventListeners();
+      this.updateCards();
+    }
+    
+    createDots() {
+      this.cards.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.classList.add('carousel-dot');
+        if (index === 0) dot.classList.add('active');
+        dot.dataset.index = index;
+        this.dotsContainer.appendChild(dot);
+      });
+    }
+    
+    addEventListeners() {
+      // Button navigation
+      this.prevBtn.addEventListener('click', () => this.navigate(-1));
+      this.nextBtn.addEventListener('click', () => this.navigate(1));
+      
+      // Dot navigation
+      this.dotsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('carousel-dot')) {
+          this.goToSlide(parseInt(e.target.dataset.index));
+        }
+      });
+      
+      // Touch/swipe support
+      this.stack.addEventListener('touchstart', (e) => {
+        this.touchStartX = e.changedTouches[0].screenX;
+      });
+      
+      this.stack.addEventListener('touchend', (e) => {
+        this.touchEndX = e.changedTouches[0].screenX;
+        this.handleSwipe();
+      });
+      
+      // Mouse drag support
+      this.stack.addEventListener('mousedown', (e) => {
+        this.isDragging = true;
+        this.touchStartX = e.screenX;
+      });
+      
+      document.addEventListener('mouseup', (e) => {
+        if (this.isDragging) {
+          this.touchEndX = e.screenX;
+          this.handleSwipe();
+          this.isDragging = false;
+        }
+      });
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (document.getElementById('projects').classList.contains('hidden')) return;
+        
+        if (e.key === 'ArrowLeft') this.navigate(-1);
+        if (e.key === 'ArrowRight') this.navigate(1);
+      });
+    }
+    
+    handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = this.touchStartX - this.touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          this.navigate(1); // Swipe left -> next
+        } else {
+          this.navigate(-1); // Swipe right -> prev
+        }
+      }
+    }
+    
+    navigate(direction) {
+      const newIndex = this.currentIndex + direction;
+      
+      if (newIndex >= 0 && newIndex < this.cards.length) {
+        this.goToSlide(newIndex);
+      }
+    }
+    
+    goToSlide(index) {
+      this.currentIndex = index;
+      this.updateCards();
+      this.updateDots();
+    }
+    
+    updateCards() {
+      this.cards.forEach((card, index) => {
+        card.classList.remove('active', 'prev', 'next');
+        
+        if (index === this.currentIndex) {
+          card.classList.add('active');
+        } else if (index < this.currentIndex) {
+          card.classList.add('prev');
+        } else {
+          card.classList.add('next');
+        }
+      });
+    }
+    
+    updateDots() {
+      const dots = this.dotsContainer.querySelectorAll('.carousel-dot');
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === this.currentIndex);
+      });
+    }
+  }
+
+// Initialize carousel when projects section is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    new ProjectCarousel();
+  });
+} else {
+  new ProjectCarousel();
 }
 
 /* ===================
