@@ -214,7 +214,7 @@ nav {
   z-index: 10;
 }
 
-/* Tooltip */
+/* Tooltip
 .skill-icon .tooltip {
   position: absolute;
   bottom: calc(100% + 12px);
@@ -243,6 +243,56 @@ nav {
 .skill-icon:hover .tooltip {
   opacity: 1;
   transform: translateX(-50%) scale(1) translateY(-2px);
+} */
+
+/* Enhanced static skill hover state */
+.static-skill {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.static-skill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #10b981, #3b82f6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  border-radius: 0.5rem;
+}
+
+.static-skill:hover,
+.static-skill.linked-hover {
+  font-weight: 700;
+  color: white !important;
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+}
+
+.static-skill:hover::before,
+.static-skill.linked-hover::before {
+  opacity: 1;
+}
+
+.dark .static-skill:hover,
+.dark .static-skill.linked-hover {
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.6);
+  color: white !important;
+}
+
+/* Marquee icon paused state */
+.skill-icon.paused-highlight {
+  transform: scale(1.3);
+  filter: brightness(1.3) drop-shadow(0 0 12px currentColor);
+  z-index: 10;
+}
+
+/* Remove tooltip since they don't work */
+.skill-icon .tooltip {
+  display: none;
 }
 
 /* ===================

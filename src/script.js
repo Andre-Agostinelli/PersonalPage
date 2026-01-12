@@ -684,6 +684,94 @@ const MarqueeSystem = {
   }
 };
 
+// Skill Linking System
+class SkillLinker {
+  constructor() {
+    this.staticSkills = document.querySelectorAll('.static-skill[data-skill]');
+    this.init();
+  }
+  
+  init() {
+    this.setupMarqueeHovers();
+    this.setupStaticHovers();
+  }
+  
+  setupMarqueeHovers() {
+    // Use event delegation on parent containers
+    // Marquee clones are created AFTER SkillLinker runs setupMarqueeHovers() once. The event listeners are only attached at initialization time.
+    document.querySelectorAll('.marquee-row').forEach(row => {
+      row.addEventListener('mouseenter', (e) => {
+        if (e.target.closest('.skill-icon[data-skill]')) {
+          const skill = e.target.closest('.skill-icon[data-skill]').dataset.skill;
+          this.pauseMarqueeIcon(skill);
+          this.highlightStatic(skill);
+        }
+      }, true);
+      
+      row.addEventListener('mouseleave', (e) => {
+        if (e.target.closest('.skill-icon[data-skill]')) {
+          const skill = e.target.closest('.skill-icon[data-skill]').dataset.skill;
+          this.unpauseMarqueeIcon(skill);
+          this.unhighlightStatic(skill);
+        }
+      }, true);
+    });
+  }
+  
+  setupStaticHovers() {
+    this.staticSkills.forEach(staticSkill => {
+      staticSkill.addEventListener('mouseenter', (e) => {
+        const skill = e.currentTarget.dataset.skill;
+        this.pauseMarqueeIcon(skill);
+        this.highlightStatic(skill);
+      });
+      
+      staticSkill.addEventListener('mouseleave', (e) => {
+        const skill = e.currentTarget.dataset.skill;
+        this.unpauseMarqueeIcon(skill);
+        this.unhighlightStatic(skill);
+      });
+    });
+  }
+  
+  highlightStatic(skill) {
+    const staticSkill = document.querySelector(`.static-skill[data-skill="${skill}"]`);
+    if (staticSkill) {
+      staticSkill.classList.add('linked-hover');
+    }
+  }
+  
+  unhighlightStatic(skill) {
+    const staticSkill = document.querySelector(`.static-skill[data-skill="${skill}"]`);
+    if (staticSkill) {
+      staticSkill.classList.remove('linked-hover');
+    }
+  }
+  
+  pauseMarqueeIcon(skill) {
+    // Find all marquee icons with this skill (including clones)
+    const icons = document.querySelectorAll(`.skill-icon[data-skill="${skill}"]`);
+    icons.forEach(icon => {
+      icon.classList.add('paused-highlight');
+    });
+  }
+  
+  unpauseMarqueeIcon(skill) {
+    const icons = document.querySelectorAll(`.skill-icon[data-skill="${skill}"]`);
+    icons.forEach(icon => {
+      icon.classList.remove('paused-highlight');
+    });
+  }
+}
+
+// Initialize after marquee system is set up
+document.addEventListener('DOMContentLoaded', () => {
+  // Wait for marquee to initialize and create clones
+  setTimeout(() => {
+    new SkillLinker();
+  }, 200);
+});
+
 /* ===================
    WAVE FIELD
    =================== */

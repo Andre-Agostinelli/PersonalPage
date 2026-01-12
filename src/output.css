@@ -391,6 +391,9 @@
       margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
+  .overflow-hidden {
+    overflow: hidden;
+  }
   .rounded-2xl {
     border-radius: var(--radius-2xl);
   }
@@ -645,14 +648,6 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-slate-700);
-      }
-    }
-  }
-  .hover\:font-bold {
-    &:hover {
-      @media (hover: hover) {
-        --tw-font-weight: var(--font-weight-bold);
-        font-weight: var(--font-weight-bold);
       }
     }
   }
@@ -1070,32 +1065,42 @@ nav {
   filter: brightness(1.2);
   z-index: 10;
 }
-.skill-icon .tooltip {
+.static-skill {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.static-skill::before {
+  content: '';
   position: absolute;
-  bottom: calc(100% + 12px);
-  left: 50%;
-  transform: translateX(-50%) scale(0.9);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  white-space: nowrap;
+  inset: 0;
+  background: linear-gradient(135deg, #10b981, #3b82f6);
   opacity: 0;
-  pointer-events: none;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #0f172a;
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  z-index: 60;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  border-radius: 0.5rem;
 }
-.dark .skill-icon .tooltip {
-  color: #e6eef4;
-  background: rgba(30, 41, 59, 0.98);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+.static-skill:hover, .static-skill.linked-hover {
+  font-weight: 700;
+  color: white !important;
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
-.skill-icon:hover .tooltip {
+.static-skill:hover::before, .static-skill.linked-hover::before {
   opacity: 1;
-  transform: translateX(-50%) scale(1) translateY(-2px);
+}
+.dark .static-skill:hover, .dark .static-skill.linked-hover {
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.6);
+  color: white !important;
+}
+.skill-icon.paused-highlight {
+  transform: scale(1.3);
+  filter: brightness(1.3) drop-shadow(0 0 12px currentColor);
+  z-index: 10;
+}
+.skill-icon .tooltip {
+  display: none;
 }
 .project-carousel {
   position: relative;
