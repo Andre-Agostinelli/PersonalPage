@@ -51,10 +51,14 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100vw;
+  overflow-x: hidden
 }
 
 body {
   overflow-x: hidden;
+  width: 100vw;
+  overflow-x: hidden
 }
 
 nav {
@@ -63,6 +67,8 @@ nav {
   left: 0;
   right: 0;
   z-index: 10;
+  width: 100vw;
+  overflow-x: hidden
 }
 
 .page {
@@ -541,7 +547,7 @@ nav {
   
   nav ul {
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
   
   .page {
@@ -557,7 +563,7 @@ nav {
   position: fixed;
   inset: 0;
   z-index: -1;
-  width: 100%;
+  width: 100vw;
   height: 100%;
   pointer-events: none;
 }

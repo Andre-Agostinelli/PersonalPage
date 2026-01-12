@@ -786,7 +786,7 @@ class WaveField {
     Object.assign(this.canvas.style, {
       position: 'fixed',
       inset: 0,
-      width: '100%',
+      width: '100vw',
       height: '100%',
       zIndex: '-1',
       pointerEvents: 'none'
