@@ -80,7 +80,7 @@ nav {
 /* ===================
    TIMELINE STYLING
    =================== */
-   
+/*AA: FIX - need to fix resizing issues. Decreases size too small if viewwindow is changed, whole sizing of svg shrinks (BUT TOOLTIPS SAME SIZE) */   
 .timeline-container {
   position: relative;
   min-height: 500px;
