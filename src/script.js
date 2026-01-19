@@ -249,7 +249,17 @@ class Timeline {
     this.width = 1400;
     this.height = 400;
     this.rowHeight = 120;
-    this.pointsPerRow = 4;
+    // Responsive points per row
+    if (window.innerWidth < 640) {
+      this.pointsPerRow = 3;
+      this.rowHeight = 140;
+    } else if (window.innerWidth < 1025) {
+      this.pointsPerRow = 4;
+      this.rowHeight = 130;
+    } else {
+      this.pointsPerRow = 5;
+      this.rowHeight = 120;
+    }    
     this.margin = 100; // More margin for wider use of page
     
     this.init();
