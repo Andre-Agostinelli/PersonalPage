@@ -175,28 +175,40 @@ const NavigationManager = {
 // Timeline configuration
 const timelineEvents = [
   {
-    date: '1995',
+    date: 'May 2002',
     title: 'Born',
     description: 'Started my journey in the world',
     phase: 0
   },
   {
-    date: '2000',
-    title: 'First Computer',
-    description: 'Got my first computer and fell in love with technology',
+    date: '2007',
+    title: 'First Intro to Computers',
+    description: 'Started playing "Minnesota Cuke" on a Windows XP Cathode Ray Tube monitor setup at my Nonos house :)',
+    phase: 0
+  },
+  {
+    date: '2007',
+    title: 'Began Kindergarten',
+    description: 'Started my educational journey in kindergarten at Montessori school',
     phase: 0
   },
   {
     date: '2008',
-    title: 'Started Coding',
-    description: 'Wrote my first "Hello World" program',
-    phase: 1
+    title: 'Started 1st Grade',
+    description: 'Emmbarked on educational journey in the Ashland Public school system',
+    phase: 0
   },
   {
-    date: '2013',
-    title: 'High School',
-    description: 'Began competitive programming',
-    phase: 1
+    date: '2008',
+    title: 'Started Playing Sports',
+    description: 'Tried out soccer and basketball⚽🏀 and instantly fell in love with both!',
+    phase: 0
+  },
+  {
+    date: '2010',
+    title: 'Began 3rd-5th Grade @ New School',
+    description: 'Started my journey through the David Mindess Elementary School in Ashland',
+    phase: 0
   },
   {
     date: '2017',
