@@ -177,25 +177,19 @@ const timelineEvents = [
   {
     date: 'May 2002',
     title: 'Born',
-    description: 'Started my journey in the world',
+    description: 'Onwards & Upwards!',
     phase: 0
   },
   {
     date: '2007',
     title: 'First Intro to Computers',
-    description: 'Started playing "Minnesota Cuke" on a Windows XP Cathode Ray Tube monitor setup at my Nonos house :)',
-    phase: 0
-  },
-  {
-    date: '2007',
-    title: 'Began Kindergarten',
-    description: 'Started my educational journey in kindergarten at Montessori school',
+    description: 'Started playing "Minnesota Cuke" on a Windows XP/Cathode Ray Tube monitor setup at my Nonos house :)',
     phase: 0
   },
   {
     date: '2008',
     title: 'Started 1st Grade',
-    description: 'Emmbarked on educational journey in the Ashland Public school system',
+    description: 'Emmbarked on educational journey in the Ashland Public school system.',
     phase: 0
   },
   {
@@ -205,47 +199,131 @@ const timelineEvents = [
     phase: 0
   },
   {
-    date: '2010',
-    title: 'Began 3rd-5th Grade @ New School',
-    description: 'Started my journey through the David Mindess Elementary School in Ashland',
-    phase: 0
+    date: '2013',
+    title: 'Started Middle School',
+    description: 'First introduction to STEM through the Ashland Middle School Makerspace with Mrs. Henry.',
+    phase: 1
+  },
+  {
+    date: '2013',
+    title: 'Tried Out Baseball',
+    description: 'Picked up Baseball ⚾ and ended up playing summer/travel league baseball.',
+    phase: 1
+  },
+  {
+    date: '2014',
+    title: 'Family Bought A Dekstop Computer',
+    description: 'Our family bought a desktop computer that sat in the family room, which I was allowed to use ;)',
+    phase: 1
+  },
+  {
+    date: '2015',
+    title: 'AAU Basketball',
+    description: 'Took basketball more seriously, played in summer & AAU leagues until High School',
+    phase: 1
+  },
+  {
+    date: '2014',
+    title: 'First time playing online video games',
+    description: 'Familiarized myself better with the online world, resources I could connect to, and of course the video games (I was already playing lots of PS4 at the neighbors).',
+    phase: 1
+  },
+  {
+    date: '2015',
+    title: 'Got my first Xbox',
+    description: '"Finally!" I remember thinknig to myself. Played lots of Halo, Assisins Creed, and many more...',
+    phase: 1
+  },
+  {
+    date: '2016',
+    title: 'Entered Freshman Year',
+    description: 'Ventured into high school @ Ashland High School.',
+    phase: 2
+  },
+  {
+    date: '2016',
+    title: 'Got Really into the PC itself & Computer Games on it',
+    description: 'Started becoming more interested in the computer, its settings, and how it worked. Also was getting really into Counter Strike: GO and League of Legends unfortunately.',
+    phase: 2
+  },
+  {
+    date: '2016',
+    title: 'Varsity Soccer',
+    description: 'Played and Started Varsity Soccer as a Freshman.',
+    phase: 2
   },
   {
     date: '2017',
-    title: 'College',
-    description: 'Started Computer Science degree',
-    phase: 2
+    title: 'Switched from Soccer and Baseball to Football and Tennis',
+    description: 'Picked up Tennis in place of Baseball as I was starting to dislike the slow-ness of the sport more and more. Switched from Soccer to Football due to a better coaching staff and more friends on the team.',
+    phase: 3
+  },
+  {
+    date: '2017',
+    title: 'Tried first AP classes',
+    description: 'Enrolled and succeeced in getting my first 5 on an exam in AP European History with Mrs. Daly!',
+    phase: 3
+  },
+  {
+    date: '2018',
+    title: 'Made new friends, joined new clubs, took harder & harder classes',
+    description: 'Immersed myself in the Model UN club, National Honors Society, STUCO, Makerspace mentoring and others. Got closer with a lot of my teammates who are friends to this day. Had my first Girlfriend and went to a Prom.',
+    phase: 3
+  },
+  {
+    date: '2018',
+    title: 'Dislocated my shoulder playing JV Football',
+    description: 'Ouch! This one sucked, and is still noticeable to this day',
+    phase: 3
+  },
+  {
+    date: '2018',
+    title: 'Kept enjoying taking harder classes & Joined upperclassmen clubs',
+    description: 'Lept into Leadership class, Senior class advisor, STUCO advisor, Deans List, and sports captain roles. Enrolled in AP Calc, AP Stats, AP CS: Principles, AP Chem, AP U.S History, AP World History (Again w/ Mrs. Daly), AP language, AP literature, among others throughout junior-senior year.',
+    phase: 4
+  },
+  {
+    date: '2018',
+    title: 'Started thinking about colleges, college decisions, and resume building for university',
+    description: 'Took PSATs, started to study for SATs/ACTs junior year, and really began thinking about school and what post-high school would look like for me...',
+    phase: 4
   },
   {
     date: '2019',
-    title: 'First Internship',
-    description: 'Software engineering intern at tech company',
-    phase: 2
-  },
-  {
-    date: '2021',
-    title: 'Graduated',
-    description: 'BS in Computer Science',
-    phase: 3
-  },
-  {
-    date: '2022',
-    title: 'First Job',
-    description: 'Software Engineer at startup',
-    phase: 3
-  },
-  {
-    date: '2024',
-    title: 'Senior Engineer',
-    description: 'Promoted to senior position',
+    title: 'Named Basketball & Tennis Captain',
+    description: 'Assumed leadership roles on different sports teams.',
     phase: 4
   },
   {
-    date: '2025',
-    title: 'Present',
-    description: 'Building amazing things',
+    date: 'Spring/Fall 2019',
+    title: 'Standardized Tests',
+    description: 'Took SATs multiple times as well as gave the ACT a try. Satisfied with solid scores on SATs once superscored, and ACTs after first try.',
     phase: 4
-  }
+  },
+  {
+    date: '2020',
+    title: 'Tri-Sport Captain & Football State Champions!',
+    description: 'Named captain for football, basketball, and tennis as well as went on to win a State Football Championship @ Gillette Stadium.',
+    phase: 4
+  },
+  {
+    date: 'Fall 2020',
+    title: 'Dislocated Ankle & got into Gym/Fitness',
+    description: 'Disloacted Ankle at the start of senior year basketball season :( ... Got really into the gym, fitness, and my wellbeing journey from this time off (and weightlifting I had picked up from football).',
+    phase: 4
+  },
+  {
+    date: '2020',
+    title: 'College Trips & Essay',
+    description: 'Road tripped to many east coast prospective schools and checked out campuses with family, as well as by myself.',
+    phase: 4
+  },
+    {
+    date: '2020',
+    title: 'COVID & College Decisions',
+    description: 'COVID turned a 2 week vacation into missing the latter half of senior year, senior tennis season, all the fun senior year events, and even stiffling graduation until August. Received some college admissions to notable schools like BU, Northeastern, WPI, RPI, & Umass. Received notable rejections like Cornell & Virginia.',
+    phase: 4
+  },
 ];
 
 // Phase colors
